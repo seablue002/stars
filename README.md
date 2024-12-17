@@ -71,8 +71,8 @@
 
 
 ## 合作与技术支持联系
-联系邮箱： 1465768310@qq.com
-工作微信： <img src="/static/images/wechat_qrcode.png" style="zoom:50%;width:220px;" />
+- 联系邮箱： 1465768310@qq.com
+- 工作微信： <img src="/static/images/wechat_qrcode.png" style="zoom:50%;width:220px;" />
 
 添加微信请备注来意，谨防忽略陌生人
 
@@ -107,18 +107,18 @@ All rights reserved。
 
 ## 繁星cms开源版软件截图
 
-![](.\static\images\free_v1.0.0\adm_tpl_01.jpg)
+![](static/images/free_v1.0.0/adm_tpl_01.jpg)
 
-![adm_tpl_02](\static\images\free_v1.0.0\adm_tpl_02.jpg)
+![](static/images/free_v1.0.0/adm_tpl_02.jpg)
 
-![adm_tpl_03](\static\images\free_v1.0.0\adm_tpl_03.jpg)
+![](static/images/free_v1.0.0/adm_tpl_03.jpg)
 
-![adm_tpl_04](\static\images\free_v1.0.0\adm_tpl_04.jpg)
+![](static/images/free_v1.0.0/adm_tpl_04.jpg)
 
-![adm_tpl_05](\static\images\free_v1.0.0\adm_tpl_05.jpg)
+![](static/images/free_v1.0.0/adm_tpl_05.jpg)
 
-![adm_tpl_06](\static\images\free_v1.0.0\adm_tpl_06.jpg)
+![](static/images/free_v1.0.0/adm_tpl_06.jpg)
 
-![adm_tpl_07](\static\images\free_v1.0.0\adm_tpl_07.jpg)
+![](static/images/free_v1.0.0/adm_tpl_07.jpg)
 
-![adm_tpl_08](\static\images\free_v1.0.0\adm_tpl_08.jpg)
+![](static/images/free_v1.0.0/adm_tpl_08.jpg)
