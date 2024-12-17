@@ -1,0 +1,139 @@
+.about-banner {
+  padding-top: 88px;
+}
+.about-banner .about-banner-container {
+  height: 750px;
+  background-color: #eee;
+}
+.about-banner .about-banner-container img {
+  width: 100%;
+  height: 100%;
+}
+.about .about-container .bref {
+  padding-bottom: 60px;
+}
+.about .about-container .bref .desc {
+  line-height: 32px;
+  font-size: 16px;
+}
+
+.service .service-container {
+  padding-bottom: 50px;
+}
+.service .service-item-container {
+  text-align: center;
+  padding: 30px;
+  margin: 15px 0;
+  background-color: #fff;
+}
+.service .service-item {
+  transition: all .3s;
+}
+.service .service-item:hover {
+  transform: translateY(-10px);
+}
+.service .service-item h4 {
+  font-size: 16px;
+  color: #333;
+  margin: 24px 0 12px;
+}
+.service .service-item p {
+  font-size: 14px;
+  text-align: left;
+  min-height: 4em;
+  max-height: 5em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.service .service-item a {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid var(--theme-color);
+  padding: 0 40px;
+  line-height: 36px;
+  border-radius: 18px;
+  margin-top: 30px;
+  transition: all .3s cubic-bezier(0, 0.36, 0.38, 1.11);
+}
+.service .service-item a span {
+  color: var(--theme-color);
+}
+.service .service-item a:hover {
+  background-color: var(--theme-color);
+}
+.service .service-item a:hover span {
+  color: #fff;
+}
+
+.team {
+  margin-bottom: 30px;
+}
+.team .page-item-title h2 {
+  margin-top: 0;
+}
+.team .members .members-item {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+.team .members .members-item img {
+  width: 100%;
+  transition: all .5s;
+}
+.team .members .members-item:hover img {
+  transform: scale(1.1);
+}
+.team .members .members-item .info {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #fff;
+  padding: 40px 30px;
+  opacity: 0;
+  transition: all 1s ease;
+}
+.team .members .members-item .info:hover {
+  background-color: rgba(37,125,255, .9);
+  opacity: 1;
+}
+.team .members .members-item .info h3 {
+  font-size: 16px;
+}
+.team .members .members-item .info p {
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+@media screen and (max-width: 768px) {
+  .about-banner {
+    padding-top: 68px;
+  }
+
+  .about-banner .about-banner-container {
+    height: 200px;
+  }
+
+  .service .service-item {
+    padding: 10px;
+  }
+  .service .service-item-container {
+    padding: 15px 10px;
+    margin: 0;
+  }
+  .service .service-item h4 {
+    margin: 15px 0 10px;
+  }
+  .service .service-item a {
+    line-height: 30px;
+    padding: 0 30px;
+    margin-top: 10px;
+  }
+
+  .page-item-title h2 {
+    margin-top: 0;
+  }
+}

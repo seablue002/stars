@@ -1,0 +1,118 @@
+a:focus, a:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
+.case-banner {
+  padding-top: 88px;
+}
+.case-banner .case-banner-container {
+  height: 400px;
+  background-color: #eee;
+}
+.case-banner .case-banner-container img {
+  width: 100%;
+  height: 100%;
+}
+.case {
+  padding-bottom: 50px;
+  background-color: #f3f5fc;
+}
+
+.category {
+  margin: 30px 0 60px;
+  background-color: #fff;
+  margin-top: 15px;
+}
+.category .tab-head li {
+  position: relative;
+  width: 50%;
+  text-align: center;
+  border-bottom: 1px solid #e6ebf2;
+  font-size: 16px;
+  color: #707481;
+  line-height: 32px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.category .tab-head li:not(:last-child) {
+  border-right: 1px solid #e6ebf2;
+}
+.category .tab-head li.active {
+  color: #121933;
+  font-weight: bold;
+  font-size: 16px;
+  border-bottom: 1px solid transparent;
+}
+.category .tab-head li a {
+  display: block;
+  height: 100%;
+}
+.category .tab-pane {
+  padding: 24px 38px;
+}
+
+.category .tab-pane .item {
+  font-size: 14px;
+  color: #121933;
+  text-align: center;
+  line-height: 32px;
+}
+
+.category .tab-pane .item.active a {
+  color: var(--theme-color);
+}
+.category .tab-pane .item a:hover {
+  color: var(--theme-color);
+}
+
+.case .case-wrapper #case-list-banner .item {
+  position: relative;
+  padding: 10px;
+  text-align: center;
+  padding-bottom: 60px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.case .case-wrapper #case-list-banner .item a.img-container {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+.case .case-wrapper #case-list-banner .item img {
+  width: 100%;
+  transition: all .3s ease-in;
+}
+.case .case-wrapper #case-list-banner .item img:hover {
+  transform: scale(1.1);
+}
+.case .case-wrapper #case-list-banner .case-cover {
+  width: 100%;
+  max-height: 208px;
+  object-fit: cover;
+}
+
+.case .case-wrapper #case-list-banner .case-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 20px 30px;
+  margin: 0 10px;
+  background-color: var(--light-gray-color);
+}
+
+.case .case-wrapper #case-list-banner .case-info h4 {
+  text-align: center;
+}
+
+.case .case-wrapper .footer {
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .case-banner {
+    padding-top: 68px;
+  }
+  .case-banner .case-banner-container {
+    height: 200px;
+  }
+}
