@@ -72,7 +72,7 @@
 
 ## 合作与技术支持联系
 联系邮箱： 1465768310@qq.com
-工作微信： <img src="/static/images/wechat_qrcode.png" style="zoom:50%;" />
+工作微信： <img src="/static/images/wechat_qrcode.png" style="zoom:50%;width:220px;" />
 
 添加微信请备注来意，谨防忽略陌生人
 
@@ -85,9 +85,10 @@
 感谢各位大佬的支持，如果本项目对您等开发、学习带来帮助，感谢打赏本项目，让我们有精力持续更加完善项目。您的支持，是我们一直坚持下来的动力。
 
 <div style="overflow:hidden">
-  <img src="static/images/wechat_pay.jpg" style="float:left;zoom: 33%;"/>
-    <img src="static/images/ali_pay.jpg" style="zoom: 22%;margin-left:30px" />
+  <img src="static/images/wechat_pay.jpg" style="float:left;zoom: 33%;width:260px;"/>
+    <img src="static/images/ali_pay.jpg" style="zoom: 22%;margin-left:30px;width:260px;" />
 </div>
+
 
 
 ## 版权信息
@@ -106,18 +107,18 @@ All rights reserved。
 
 ## 繁星cms开源版软件截图
 
-![](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_01.jpg)
+![](.\static\images\free_v1.0.0\adm_tpl_01.jpg)
 
-![adm_tpl_02](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_02.jpg)
+![adm_tpl_02](\static\images\free_v1.0.0\adm_tpl_02.jpg)
 
-![adm_tpl_03](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_03.jpg)
+![adm_tpl_03](\static\images\free_v1.0.0\adm_tpl_03.jpg)
 
-![adm_tpl_04](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_04.jpg)
+![adm_tpl_04](\static\images\free_v1.0.0\adm_tpl_04.jpg)
 
-![adm_tpl_05](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_05.jpg)
+![adm_tpl_05](\static\images\free_v1.0.0\adm_tpl_05.jpg)
 
-![adm_tpl_06](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_06.jpg)
+![adm_tpl_06](\static\images\free_v1.0.0\adm_tpl_06.jpg)
 
-![adm_tpl_07](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_07.jpg)
+![adm_tpl_07](\static\images\free_v1.0.0\adm_tpl_07.jpg)
 
-![adm_tpl_08](D:\project04\git-free\starts\static\images\free_v1.0.0\adm_tpl_08.jpg)
+![adm_tpl_08](\static\images\free_v1.0.0\adm_tpl_08.jpg)
