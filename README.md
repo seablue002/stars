@@ -52,9 +52,10 @@
 
 #### 后端工程&&前端工程
 <div style="overflow:hidden">
-  <img src="D:\project04\git-free\starts\static\images\backend_code.png" style="float:left;zoom:60%;" />
-  <img src="D:\project04\git-free\starts\static\images\frontend_code.png" style="zoom:56%;" />
+  <img src="static/images/backend_code.png" style="float:left;zoom:60%;" />
+  <img src="static/images/frontend_code.png" style="zoom:56%;" />
 </div>
+
 
 
 ## 开发环境

@@ -1,0 +1,99 @@
+@import '~@/assets/style/variable.scss';
+#app, body, html {
+  height: 100%;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+input:-internal-autofill-previewed, input:-internal-autofill-selected {
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.PAGE-MAIN-CONTENT {
+  box-sizing: border-box;
+  .page-header {
+    margin-bottom: 10px;
+  }
+  .el-card {
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    .el-card__header {
+      padding: 15px 18px 0;
+      border-bottom: 0;
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-header__toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .el-space__item {
+          &:last-child {
+            margin-right: 0 !important;
+          }
+        }
+        .more-opts {
+          .el-icon {
+            color: #333;
+            font-size: 18px;
+            &:hover {
+              color: $mainThemeColor;
+            }
+          }
+        }
+      }
+    }
+  }
+  .upload-pic-view {
+    position: relative;
+    height: 110px;
+    .icon-close {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      color: #fff;
+      font-size: 15px;
+      padding: 2px;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, .6);
+      border-radius: 50%;
+    }
+  }
+  .table-search {
+    .el-form--inline {
+      .el-form-item {
+        margin-right: 10px;
+        &.opts-btn {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+  .add-row-btn {
+    width: 100%;
+  }
+  .el-dropdown-link {
+    font-size: 12px;
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-dialog {
+    &__body {
+      padding-top: 0;
+    }
+  }
+}
+.ql-snow {
+  .ql-picker {
+    line-height: 1;
+  }
+}

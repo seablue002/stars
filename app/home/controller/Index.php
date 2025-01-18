@@ -156,10 +156,6 @@ class Index extends IndexBase
           'tpl_list_item_var' => (function () use ($tpl) {
             return function ($vo) use ($tpl) {
               $this->template->display($tpl['item_var'], ['vo' => $vo]);
-//              $this->template->__set('vo', $vo);
-//              $a = $tpl['item_var'];
-//              $this->template->parse($a);
-//              echo $a;
             };
           })(),
           'list' => $list
@@ -196,11 +192,14 @@ class Index extends IndexBase
 
     ob_start();
     $this->template->display($tpl['content'], $tpl_var_data);
-    $tpl_html = ob_get_contents();
-    $fp = fopen($catche_tpl_name, 'w');
-    if ($fp) {
-      fwrite($fp, $tpl_html);
-      fclose($fp);
+
+    if (file_exists($catche_tpl_name)) {
+      $tpl_html = ob_get_contents();
+      $fp = fopen($catche_tpl_name, 'w');
+      if ($fp) {
+        fwrite($fp, $tpl_html);
+        fclose($fp);
+      }
     }
   }
 
