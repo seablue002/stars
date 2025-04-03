@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import Tips from '@/components/Tips.vue'
 const GlobalComponentPlugin = {
-  install<T> (app: App, options?: T): void {
+  install (app: App): void {
     app.component(Tips.name, Tips)
   }
 }

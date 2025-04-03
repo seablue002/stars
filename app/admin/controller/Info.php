@@ -64,15 +64,34 @@ class Info extends AdminBase
       'content' => input('post.content'),
       'title_url' => input('post.title_url'),
       'label_ids' => input('post.label'),
-      'publish_time' => input('post.publish_time')
+      'publish_time' => strtotime(input('post.publish_time'))
     ];
 
     try {
       if (isset($_FILES['cover']) && !empty($_FILES['cover'])) {
         $cover_file                 = new UploadedFile($_FILES['cover']['tmp_name'], $_FILES['cover']['name'], $_FILES['cover']['type'], $_FILES['cover']['error']);
         $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
-        $data['cover_url'] = str_replace('\\','/', $url);;
+        $data['cover_url'] = str_replace('\\','/', $url);
       }
+
+      // 图片集合处理
+      if (isset($_FILES['images']) && !empty($_FILES['images'])) {
+        $picFiles = $_FILES['images'];
+
+        if (!empty($picFiles)) {
+          $picsData = [];
+          foreach ($picFiles['name'] as $key => $name) {
+            $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
+            $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
+            // 组装存储在数据库中的图片集合信息
+            $picsData[] = [
+              'url' => str_replace('\\','/', $url)
+            ];
+          }
+          $data['images'] = json_encode($picsData);
+        }
+      }
+
       $this->infoBusiness->insertInfo($data);
     } catch (\Exception $e) {
       return $this->responseMessage->error($e->getMessage());
@@ -85,12 +104,14 @@ class Info extends AdminBase
   {
     $id = input('get.id', 0, 'intval');
     try {
-      $category_data = $this->infoBusiness->getInfoDetail($id);
+      $detail = $this->infoBusiness->getInfoDetail($id);
+
+      $detail['images'] = $detail['images'] ? json_decode($detail['images']) : [];
     } catch (\Exception $e) {
       return $this->responseMessage->error($e->getMessage());
     }
 
-    return $this->responseMessage->success('信息详情数据获取成功', $category_data);
+    return $this->responseMessage->success('信息详情数据获取成功', $detail);
   }
 
   // 编辑信息
@@ -113,6 +134,31 @@ class Info extends AdminBase
         $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
         $data['cover_url'] = str_replace('\\','/', $url);
       }
+
+      // 图片集合处理
+      if (isset($_FILES['images']) && !empty($_FILES['images'])) {
+        $picFiles = $_FILES['images'];
+
+        if (!empty($picFiles)) {
+          $picsData = [];
+          foreach ($picFiles['name'] as $key => $name) {
+            $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
+            $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
+            // 组装存储在数据库中的图片集合信息
+            $picsData[] = [
+              'url' => str_replace('\\','/', $url)
+            ];
+          }
+          $detail = $this->infoBusiness->infoModel
+          ->where(['id' => $data['id']])
+          ->field("images")
+          ->find()
+          ->toArray();
+          $detail['images'] = json_decode($detail['images']) ?? [];
+          $data['images'] = json_encode(array_merge($picsData, $detail['images']));
+        }
+      }
+
       $this->infoBusiness->updateInfo($data);
     } catch (\Exception $e) {
       return $this->responseMessage->error($e->getMessage());
@@ -134,5 +180,21 @@ class Info extends AdminBase
       return $this->responseMessage->error('删除封面图失败');
     }
     return $this->responseMessage->success('删除封面图成功');
+  }
+
+  // 删除资源（栏目数据模型为图片、下载时的图片、文件等资源删除）
+  public function deleteResource () {
+    $data = [
+      'info_id' => input('post.info_id', 0, 'intval'),
+      'column_id' => input('post.column_id', 0, 'intval'),
+      'resource_type' => input('post.resource_type', 'pic'),
+      'resource_url' => input('post.resource_url', ''),
+    ];
+    try {
+      $this->infoBusiness->deleteResource($data);
+    } catch (\Exception $e) {
+      return $this->responseMessage->error('删除失败'.$e->getMessage());
+    }
+    return $this->responseMessage->success('删除成功');
   }
 }

@@ -59,16 +59,19 @@ function getColumnExtendFields ($where = [], $fields = '*') {
  * @param string $mode 提取url的模式 detail内容页，list列表页
  */
 function getUrl ($manual_url, $column, $id = '', $mode = 'detail') {
+  $url = '';
   if ($manual_url) {
     $url = $manual_url;
   } else {
     if ($mode === 'detail') {
       $url = $column['parent_dir_path'] . $column['column_dir_path'] . '/' . $id . '.html';
     } else {
-      $url = $column['parent_dir_path'] . $column['column_dir_path'];
+      if ($column['column_dir_path'] !== 'index') {
+        $url = $column['parent_dir_path'] . $column['column_dir_path'];
+      }
     }
   }
-  return request()->domain() .'/home.php/' . $url;
+  return request()->domain() .'/' . $url;
 }
 
 /**
@@ -78,14 +81,13 @@ function getUrl ($manual_url, $column, $id = '', $mode = 'detail') {
  * @param string $current_class_name 当前菜单选中的当前样式类名
  * @return string 面包屑导航信息html字符串
  */
-function breadcrumb ($column, $base_file = 'home.php', $current_class_name = 'active') {
+function breadcrumb ($column, $base_file = '/', $current_class_name = 'active') {
   $column_business = new ColumnBusiness;
   $column_list = $column_business->getColumnNormalInfoList();
 
   $column_list = getTopParent($column_list, $column['id']);
 
-  $html_str = '<ol class="breadcrumb">
-                <li><a href="' . $base_file . '">首页</a></li>';
+  $html_str = '<a href="' . $base_file . '">首页</a> &gt; ';
 
   foreach ($column_list as $item) {
     $extra_fields = getColumnExtendFields(['column_id' => $item['id']], ['column_manual_url']);
@@ -93,13 +95,11 @@ function breadcrumb ($column, $base_file = 'home.php', $current_class_name = 'ac
     $href = 'href="' . $url . '"';
     $is_current = $item['id'] === $column['id'];
     if (!$is_current) {
-      $html_str .= '<li><a ' . $href . '>' . $item['name'] . '</a></li>';
+      $html_str .= '<a ' . $href . '>' . $item['name'] . '</a> &gt; ';
     } else {
-      $html_str .= '<li class="' . ($is_current ? $current_class_name : "") . '"' . '>' . $item['name'] . '</li>';
+      $html_str .= '<a class="' . ($is_current ? $current_class_name : "") . '"' . '>' . $item['name'] . '</a>';
     }
   }
-
-  $html_str .= '</ol>';
 
   return $html_str;
 }

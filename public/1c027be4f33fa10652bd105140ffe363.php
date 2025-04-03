@@ -1,0 +1,530 @@
+<?php /*a:1:{s:63:"D:\project04\gitee-free\stars\public\tpl_catche\home\index.html";i:1743653979;}*/ ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">   <title>响应式风机工业设备网站模板_响应式风机工业设备网站模板</title>
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link href="/template/default/static/css/common.css" rel="stylesheet" media="screen" type="text/css" />
+  <link href="/template/default/static/css/style.css" rel="stylesheet" media="screen" type="text/css" />
+  <link href="/template/default/static/css/swiper.min.css" rel="stylesheet" media="screen" type="text/css" />
+  <link href="/template/default/static/css/animate.css" rel="stylesheet" media="screen" type="text/css" />
+  
+</head>
+
+<body> <div class="submenu">
+    <div class="web_top wow fadeInDown">
+    <div class="eytop_main">
+      <div class="web_logo"> <a href="https://www.stars.com"><img src="/template/default/static/images/1-200H01F951534.png" class="logo1" alt="响应式风机工业设备网站模板" /><img src="/template/default/static/images/1-240F50ZIR40.png" class="logo2" alt="响应式风机工业设备网站模板" /></a> </div>
+      <div class="eytop_right">
+        <div class="eytop_search">
+          <form method="get" action="https://www.stars.com/index.php?m=home&amp;c=Search&amp;a=lists" onsubmit="return searchForm();">
+            <div class="sc_ipt">
+              <input type="text" name="keywords" id="keywords" placeholder="请输入关键词..." />
+            </div>
+            <div class="sc_btn">
+              <input type="submit" value="" />
+            </div>
+            <div class="clear"></div>
+            <input type="hidden" name="m" value="home" /><input type="hidden" name="c" value="Search" /><input type="hidden" name="a" value="lists" /><input type="hidden" name="method" value="1" />
+          </form>
+        </div>
+        <div class="eytop_tel"><img src="/template/default/static/images/top_tel.png" />400-123-4567</div>
+        <div class="clear"></div>
+      </div>
+      <div class="web_nav">
+        <div class="nav_menu"> <span></span> <span></span> <span></span> </div>
+        <div class="nav_list">
+          <ul>   <li class="active">
+                      <a target="_blank" href="http://www.stars.com/">首页
+                      </a>
+                      <em></em>
+                      <i></i>
+                      <li class="">
+                      <a target="_blank" href="http://www.stars.com/about/40.html">关于我们
+                      </a>
+                      <em></em>
+                      <i></i>
+                      <li class="">
+                        <a target="_blank" href="http://www.stars.com/product">产品展示 
+                        </a>
+                        <em></em>
+                        <i></i>
+                        <ul>
+                          <li>
+                    <a target="_blank" href="http://www.stars.com/product/hbfj">环保风机</a>
+                  </li><li>
+                    <a target="_blank" href="http://www.stars.com/product/tzfj">涂装风机</a>
+                  </li><li>
+                    <a target="_blank" href="http://www.stars.com/product/gwfj">高温风机</a>
+                  </li>
+                        </ul>
+                      </li><li class="">
+                        <a target="_blank" href="http://www.stars.com/news">新闻中心 
+                        </a>
+                        <em></em>
+                        <i></i>
+                        <ul>
+                          <li>
+                    <a target="_blank" href="http://www.stars.com/news/hyxw">行业新闻</a>
+                  </li><li>
+                    <a target="_blank" href="http://www.stars.com/news/gsxw">公司新闻</a>
+                  </li>
+                        </ul>
+                      </li><li class="">
+                      <a target="_blank" href="http://www.stars.com/message">在线留言
+                      </a>
+                      <em></em>
+                      <i></i>
+                      <li class="">
+                      <a target="_blank" href="http://www.stars.com/contact">联系我们
+                      </a>
+                      <em></em>
+                      <i></i>
+                       </ul>
+          <div class="nav_mask"></div>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div> <div class="web_banner wow fadeInUp">
+    <div class="swiper-container1">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background:url(/template/default/static/images/1-200H01G401b2.jpg) center center no-repeat;"></div>
+        <div class="swiper-slide" style="background:url(/template/default/static/images/1-200H01G413560.jpg) center center no-repeat;"></div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  <div class="eya_news wow zoomIn">
+    <div class="main">
+      <div class="cont">
+        <div class="swiper-container2">
+          <div class="swiper-wrapper">  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/23.html" title="锅炉风机产生故障的原因是什么？">锅炉风机产生故障的原因是什么？</a>
+                <p>推进居住小区充电设施建设，优化公共充电站布局，加快公路干线充电设施建设&hellip;&hellip;3月19日，河南省郑州市发布《郑州市电动汽车充电基础设施发展规划（2024-2035年</p>
+              </div>
+            </div>  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/24.html" title="锅炉风机产生故障的原因是什么？">锅炉风机产生故障的原因是什么？</a>
+                <p>推进居住小区充电设施建设，优化公共充电站布局，加快公路干线充电设施建设&hellip;&hellip;3月19日，河南省郑州市发布《郑州市电动汽车充电基础设施发展规划（2024-2035年</p>
+              </div>
+            </div>  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/25.html" title="锅炉用风机结构是怎样的？有什么作用？">锅炉用风机结构是怎样的？有什么作用？</a>
+                <p>2023年12月29日，中国电建清洁能源基础设施REITs获得证监会和上交所批复，成为全国水电行业首单、四川省首单、少数民族地区首单获批的公募REITs项目，中</p>
+              </div>
+            </div>  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/26.html" title="锅炉用风机是哪样的？又什么特点？">锅炉用风机是哪样的？又什么特点？</a>
+                <p>多年期绿电采购协议可以确保企业获得长期稳定的电力供应，避免电力市场价格的波动和不稳定性对企业生产和运营的影响，同时可以为可再生能源行业提供稳定的市场需求和收入来</p>
+              </div>
+            </div>  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/27.html" title="怎样才能选到适合的百叶风口？">怎样才能选到适合的百叶风口？</a>
+                <p>1月4日，阿布扎比创新技术公司AIQ与亚马逊网络服务公司(AWS)达成合作，AIQ将作为后者认证合作伙伴，把能源行业自动化解决方案WellInsight带入AW</p>
+              </div>
+            </div>  <div class="swiper-slide">
+              <div class="time"> <span>03-27</span>
+                <p>2025</p>
+              </div>
+              <div class="text"> <a href="http://www.stars.com/news/hyxw/28.html" title="离心风机的除尘效果怎么样？">离心风机的除尘效果怎么样？</a>
+                <p>某传统发电企业想要参与虚拟电厂，领导问了一个问题：我的火电厂能不能做虚拟电厂？我说：你都实体电厂了，还能叫虚拟电厂么？实体电厂可以和虚拟电厂一样，为电力系统提供</p>
+              </div>
+            </div>  </div>
+        </div>
+      </div>
+      <div class="button">
+        <div class="swiper-button-prev1"></div>
+        <div class="swiper-button-next1"></div>
+      </div>
+      <div class="more"> <span>新闻中心</span>
+        <p><a href="/news">查看更多</a></p>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div class="eya_tjpro">
+    <div class="eya_title wow fadeInDown"> <span>Recommended</span>
+      <p>热门产品</p>
+    </div>
+    <div class="eya_tjpro_list wow fadeInUp">
+      <div class="swiper-container3">
+        <div class="swiper-wrapper">  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/38.html" class="pro_img"><img src="/storage/info_cover/20250327/5884b22dac727df1eeec66c5063b98d8.png" alt="零泄露防腐风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/38.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">零泄露防腐风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/38.html"></a></em>
+            </div>
+          </div>  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/37.html" class="pro_img"><img src="/storage/info_cover/20250327/ac928aaffbc9b41a731090d0ce5295fd.png" alt="低噪声混流式风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/37.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">低噪声混流式风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/37.html"></a></em>
+            </div>
+          </div>  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/36.html" class="pro_img"><img src="/storage/info_cover/20250327/00f3d7e16363e73bba044beca69a60fb.png" alt="消防排烟风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/36.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">消防排烟风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/36.html"></a></em>
+            </div>
+          </div>  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/35.html" class="pro_img"><img src="/storage/info_cover/20250327/3eb8cd2d6aae032ea6b30a1a0f07c478.png" alt="透浦式风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/35.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">透浦式风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/35.html"></a></em>
+            </div>
+          </div>  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/34.html" class="pro_img"><img src="/storage/info_cover/20250327/ffc23959e484c169609ff4308dacc3df.png" alt="1500W中压鼓风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/34.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">1500W中压鼓风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/34.html"></a></em>
+            </div>
+          </div>  <div class="swiper-slide">
+            <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/33.html" class="pro_img"><img src="/storage/info_cover/20250327/3cf02c6bfabff03d3e2916d30dd1fbf4.png" alt="隔热中压风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/33.html" title="IAS-Online-PAT L1" class="eya_tjpro_name">隔热中压风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/33.html"></a></em>
+            </div>
+          </div>  </div>
+      </div>
+      <div class="swiper-button-prev2"></div>
+      <div class="swiper-button-next2"></div>
+    </div>
+  </div>
+  <div class="web_aboutss">
+    <div class="webab_main">
+      <div class="webab_con wow fadeInLeft">
+        <div class="webab_title"> <i>About us</i><span>关于我们</span> </div>  <div class="webab_text">某某风机设备有限公司隶属于广东某某环保科技有限公司，某某环保科技有限公司是广州市较早的消防通风设备厂家之一。取得了和生产直接相关的多项专利，使公司产品始终保持了工艺领先。品质领先成本领先水平。公司位于广州市经济开发区崇德二大道，毗邻京福高速公路、104国道、德衡高速公路，环境优美地理位置优越、交通便利，是经商创业的理想场所。公司自200X年11月成立，占地面积4万平方米，注册资金 10XX万元，现有员工X00人，其中高级工程师5人，工程师12人，专业技术人员20人。公司专业从事生产各类排烟风机、轴流风机、屋顶风机、 离心风机、混流风机、斜流风机、柜式风机、防火阀、排烟防火阀、排烟阀、止回阀、电动调节阀、正压送风口等消防通风设备。 风机、阀类产品广泛应用于住宅、办公楼、宾馆酒店、商场超市等民用商用建筑工程和机械、机电、电力、电子、治金、化工、医药、食品等行业。 自创业以来，企业凭... </div>  <div class="webab_more"> <a href="http://www.stars.com/about/40.html" target="_blank">查看更多</a> </div>
+      </div>
+      <div class="webab_pic">
+        <ul>
+          <li class="wow fadeInRight"><img src="/template/default/static/images/eya_ab1.jpg" /></li>
+          <li class="wow fadeInRight">
+            <div class="cont"> <span>2008</span>
+              <p>公司成立于2008年</p>
+            </div>
+          </li>
+          <li class="wow fadeInLeft"><img src="/template/default/static/images/eya_ab2.jpg" /></li>
+          <li class="wow fadeInLeft">
+            <div class="cont"> <span>1099</span>
+              <p>公司为1099多家公司提供服务</p>
+            </div>
+          </li>
+          <li class="wow fadeInRight"><img src="/template/default/static/images/eya_ab3.jpg" /></li>
+          <li class="wow fadeInRight">
+            <div class="cont"> <span>200</span>
+              <p>公司现有员工200多人</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div class="eya_pro">
+    <div class="eya_title wow fadeInDown"> <span>product</span>
+      <p>产品展示</p>
+    </div>
+    <div class="pro_left wow fadeInLeft">
+      <div class="h_left">
+        <div class="cp_type">
+          <div class="hd">
+            <p>产品展示</p>
+            <span>product</span>
+          </div>
+          <div class="bd">
+                        <ul>
+                            <li>
+                <p><a href="http://www.stars.com/product/hbfj" title="环保风机" target="_blank">环保风机</a><span></span></p>
+                                <div> <a href="http://www.stars.com/product/hbfj/bxgfj" target="_blank" title="不锈钢风机">不锈钢风机</a> </div>
+                                <div> <a href="http://www.stars.com/product/hbfj/lxfj" target="_blank" title="离心风机">离心风机</a> </div>
+                              </li>
+                            <li>
+                <p><a href="http://www.stars.com/product/tzfj" title="涂装风机" target="_blank">涂装风机</a><span></span></p>
+                                <div> <a href="http://www.stars.com/product/tzfj/zlfj" target="_blank" title="轴流风机">轴流风机</a> </div>
+                                <div> <a href="http://www.stars.com/product/tzfj/hlfj" target="_blank" title="混流风机">混流风机</a> </div>
+                              </li>
+                            <li>
+                <p><a href="http://www.stars.com/product/gwfj" title="高温风机" target="_blank">高温风机</a><span></span></p>
+                              </li>
+                          </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="eya_pro_list">
+      <div class="cont">
+                <ul>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/39.html" class="pro_img"><img src="/storage/info_cover/20250327/456d8a1b3889816234a763c36675e575.jpg" alt="材质离心风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/39.html" title="材质离心风机" class="eya_tjpro_name">材质离心风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/39.html"></a></em>
+            </div>
+          </li>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/38.html" class="pro_img"><img src="/storage/info_cover/20250327/5884b22dac727df1eeec66c5063b98d8.png" alt="零泄露防腐风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/38.html" title="零泄露防腐风机" class="eya_tjpro_name">零泄露防腐风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/38.html"></a></em>
+            </div>
+          </li>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/37.html" class="pro_img"><img src="/storage/info_cover/20250327/ac928aaffbc9b41a731090d0ce5295fd.png" alt="低噪声混流式风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/37.html" title="低噪声混流式风机" class="eya_tjpro_name">低噪声混流式风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/37.html"></a></em>
+            </div>
+          </li>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/36.html" class="pro_img"><img src="/storage/info_cover/20250327/00f3d7e16363e73bba044beca69a60fb.png" alt="消防排烟风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/36.html" title="消防排烟风机" class="eya_tjpro_name">消防排烟风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/36.html"></a></em>
+            </div>
+          </li>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/35.html" class="pro_img"><img src="/storage/info_cover/20250327/3eb8cd2d6aae032ea6b30a1a0f07c478.png" alt="透浦式风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/35.html" title="透浦式风机" class="eya_tjpro_name">透浦式风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/35.html"></a></em>
+            </div>
+          </li>
+                    <li class="wow zoomIn">
+                         <div class="eya_tjpro_img"><a href="http://www.stars.com/product/hbfj/bxgfj/34.html" class="pro_img"><img src="/storage/info_cover/20250327/ffc23959e484c169609ff4308dacc3df.png" alt="1500W中压鼓风机" /><i></i></a></div>
+            <div class="eya_tjpro_text"> <a href="http://www.stars.com/product/hbfj/bxgfj/34.html" title="1500W中压鼓风机" class="eya_tjpro_name">1500W中压鼓风机</a>
+              <p>型号：ABC-6109</p>
+              <em><a href="http://www.stars.com/product/hbfj/bxgfj/34.html"></a></em>
+            </div>
+          </li>
+                  </ul>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div> <div class="foot">
+  <div class="gotop wow fadeInDown">
+    <div class="topmain"><a class="totop"></a></div>
+  </div>
+  <div class="links wow fadeInUp">
+    <div class="links_main">
+      <dt>友情链接：</dt>
+      <dd> <a href="http://www.baidu.com" target="_blank">百度</a> <a href="http://www.qq.com" target="_blank">腾讯</a> <a href="http://www.sina.com.cn" target="_blank">新浪</a> <a href="http://www.taobao.com" target="_blank">淘宝</a> <a href="http://www.weibo.com" target="_blank">微博</a> </dd>
+    </div>
+  </div>
+  <div class="contact wow fadeInUp">  <ul>
+      <li> <img src="/template/default/static/images/foot_i1.png" />
+        <div class="fl"> <span>热线电话：</span>
+          <p>400-123-4567</p>
+        </div>
+      </li>
+      <li> <img src="/template/default/static/images/foot_i2.png" />
+        <div class="fl"> <span>电子邮箱：</span>
+          <p>admin@youweb.com</p>
+        </div>
+      </li>
+      <li> <img src="/template/default/static/images/foot_i3.png" />
+        <div class="fl"> <span>公司地址：</span>
+          <p>广东省广州市天河区某某工业区88号</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="foot_main wow fadeInUp">
+    <ul>
+      <li>
+        <div class="title"> <span>Follow us</span>
+          <p>关注我们</p>
+        </div>
+        <img src="/template/default/static/images/1-200H1094023F1.png" />
+      </li>
+      <li>
+        <div class="title"> <span>product</span>
+          <p>产品展示</p>
+        </div>
+        <dl>  <dd><a href="http://www.stars.com/product/hbfj" target="_blank">环保风机</a></dd>  <dd><a href="http://www.stars.com/product/tzfj" target="_blank">涂装风机</a></dd>  <dd><a href="http://www.stars.com/product/gwfj" target="_blank">高温风机</a></dd>  </dl>
+      </li>
+      <li>
+        <div class="title"> <span>News Center</span>
+          <p>新闻中心</p>
+        </div>
+        <dl>  <dd><a href="http://www.stars.com/news/hyxw" target="_blank">行业新闻</a></dd>  <dd><a href="http://www.stars.com/news/gsxw" target="_blank">公司新闻</a></dd>  </dl>
+      </li>
+      <li>
+        <div class="title"> <span>copyright</span>
+          <p>版权信息</p>
+        </div>
+        <dl>
+          <dd>备案号：<a href="https://beian.miit.gov.cn/" rel="nofollow" target="_blank">粤ICP备xxxxxxxx号</a></dd>
+          <dd>2026  ©版权所有 <a target="_blank" href="https://www.linyuankj.cn/">临渊科技</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <div class="clear"></div>
+  </div>
+</div>
+<script language="javascript" type="text/javascript" src="/template/default/static/js/jquery-3.7.0.min.js"></script>
+<script language="javascript" type="text/javascript" src="/template/default/static/js/swiper.min.js"></script>
+<script language="javascript" type="text/javascript" src="/template/default/static/js/smint.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.submenu').smint({
+      'scrollSpeed': 1000
+    });
+  });
+</script>
+<script language="javascript" type="text/javascript" src="/template/default/static/js/wow.min.js"></script>
+<!--此Js使手机浏览器的active为可用状态-->
+<script type="text/javascript">
+  document.addEventListener("touchstart", function() {}, true);
+</script>
+<script type="text/javascript">
+  $('.nav_mask').click(function() {
+    $('.nav_list').removeClass('open')
+  })
+  $('.nav_menu,.nav_list').click(function(e) {
+    e.stopPropagation()
+  })
+  $('.web_nav').find('.nav_menu').click(function(e) {
+    $('.nav_list').toggleClass('open')
+  })
+  $(function() {
+    $(".nav_list ul li i").click(function() {
+      var b = false;
+      if ($(this).attr("class") == "cur") {
+        b = true;
+      }
+      $(".nav_list ul li ul").prev("i").removeClass("cur");
+      $(".nav_list>ul>li").children("ul").slideUp("fast");
+      if (!b) {
+        $(this).addClass("cur");
+        $(this).siblings("ul").slideDown("fast");
+      }
+    })
+  });
+</script>
+<script language="javascript" type="text/javascript" src="/template/default/static/js/common.js"></script> <script type="text/javascript">
+    var swiper1 = new Swiper('.swiper-container1', {
+      autoplay: 3000, //自动播放时间
+      loop: true, //开启循环true or false
+      slidesPerView: 1, //列数
+      spaceBetween: 0, //slides之间间隔
+      breakpointsInverse: true,
+      pagination: '.swiper-pagination',
+      paginationClickable: true,
+      observer: true,
+      observeParents: true,
+      autoplayDisableOnInteraction: false,
+      breakpoints: {
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        },
+        767: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        },
+        1080: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        },
+        1200: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        }
+      }
+    });
+  </script>
+  <script language="javascript" type="text/javascript" src="/template/default/static/js/pro.js"></script>
+  <script type="text/javascript">
+    var swiper3 = new Swiper('.swiper-container3', {
+      autoplay: 3000, //自动播放时间
+      loop: true, //开启循环true or false
+      slidesPerView: 4, //列数
+      spaceBetween: 20, //slides之间间隔
+      breakpointsInverse: true,
+      nextButton: '.swiper-button-next2',
+      prevButton: '.swiper-button-prev2',
+      paginationClickable: true,
+      observer: true,
+      observeParents: true,
+      autoplayDisableOnInteraction: false,
+      breakpoints: {
+        375: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        425: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        767: {
+          slidesPerView: 2,
+          spaceBetween: 10
+        },
+        1080: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        1200: {
+          slidesPerView: 4,
+          spaceBetween: 20
+        }
+      }
+    });
+  </script>
+  <script type="text/javascript">
+    var swiper2 = new Swiper('.swiper-container2', {
+      autoplay: 3000, //自动播放时间
+      loop: false, //开启循环true or false
+      slidesPerView: 2, //列数
+      spaceBetween: 40, //slides之间间隔
+      breakpointsInverse: true,
+      nextButton: '.swiper-button-next1',
+      prevButton: '.swiper-button-prev1',
+      paginationClickable: true,
+      observer: true,
+      observeParents: true,
+      autoplayDisableOnInteraction: false,
+      breakpoints: {
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        800: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        1024: {
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+        1080: {
+          slidesPerView: 2,
+          spaceBetween: 20
+        },
+        1200: {
+          slidesPerView: 2,
+          spaceBetween: 40
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

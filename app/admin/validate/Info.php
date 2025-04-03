@@ -31,6 +31,23 @@ class Info extends Validate
   protected $scene = [
     'add' => ['title', 'column_id', 'create_time'],
     'edit' => ['id', 'title', 'column_id', 'update_time'],
-    'detail' => ['id']
+    'detail' => ['id'],
+    'delete-cover' => ['id', 'column_id'],
   ];
+
+  public function __construct()
+  {
+    parent::__construct();
+    $validateName = (new \ReflectionClass($this))->getShortName();
+    if (in_array($validateName, ['Info'])) {
+      // 追加校验规则
+      $this->rule['resource_type'] = 'require';
+      $this->rule['resource_url'] = 'require';
+
+      $this->message['resource_type'] = '资源类型必须';
+      $this->message['resource_url'] = '资源url必须';
+
+      $this->scene['delete-resource'] = ['id', 'column_id', 'resource_type', 'resource_url'];
+    }
+  }
 }

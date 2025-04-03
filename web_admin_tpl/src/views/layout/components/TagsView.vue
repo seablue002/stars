@@ -5,7 +5,7 @@
         ref="tagsScrollBar"
         class="scrollbar"
       >
-        <!-- <router-link
+        <router-link
           to="/"
           ref="tagRef0"
           :class="$route.fullPath === '/dashboard' ? 'active' : ''"
@@ -13,7 +13,7 @@
           @contextmenu.prevent="openMenu({ fullPath: '/dashboard' }, $event)"
         >
           首页
-        </router-link> -->
+        </router-link>
         <router-link
           v-for="(tag, idx) in routerHistoryTags"
           :key="tag.fullPath"

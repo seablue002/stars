@@ -309,6 +309,10 @@ export const formateResourceUrl = function (path: string): string {
   return `${RESOURCE_PATH}${path}`
 }
 
+export const unformatResourceUrl = function (path: string): string {
+  return path.replace(`${RESOURCE_PATH}`, '')
+}
+
 // 手动触发window系统事件
 export const triggleWindowSystemEvent = (eventName: string): void => {
   const resizeEvent = document.createEvent('Event')

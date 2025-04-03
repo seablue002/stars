@@ -9,7 +9,7 @@ class Column extends BaseModel
     return $this
       ->alias('c1')
       ->leftJoin('column c2', 'c1.pid = c2.id')
-      ->field(['c1.id', 'c1.name', 'c1.is_last', 'c1.cover_url', 'c1.parent_dir_path', 'c1.column_dir_path', 'c1.pid', 'c2.name as p_name'])
+      ->field(['c1.id', 'c1.name', 'c1.is_last', 'c1.is_show_in_nav', 'c1.cover_url', 'c1.parent_dir_path', 'c1.column_dir_path', 'c1.pid', 'c2.name as p_name'])
       ->order('c1.sort ASC')
       ->select()
       ->toArray();
@@ -17,6 +17,11 @@ class Column extends BaseModel
     public function getColumnInfoList($fields = '*', $where = [])
   {
     return $this->getList($fields, ['sort ASC'], $where);
+  }
+
+  public function extendFields()
+  {
+    return $this->hasOne(ColumnExtendFields::class,'column_id');
   }
 
 }

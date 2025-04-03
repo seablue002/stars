@@ -11,6 +11,7 @@
 
 // [ 应用入口文件 ]
 namespace think;
+
 // 暂时支持options请求，解决前台请求跨域问题，tp6自带跨域中间件的bug，后续需要升级tp6版本！！！！！！！！！！！
 if($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
   header("Access-Control-Allow-Origin:*");

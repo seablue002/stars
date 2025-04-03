@@ -7,6 +7,7 @@ use think\App;
 use app\common\business\SystemConfig AS SystemConfigBusiness;
 use think\Request;
 use think\Template;
+use think\facade\View;
 use app\home\business\Column as ColumnBusiness;
 use app\home\business\TplVar as TplVarBusiness;
 use app\common\lib\Utils;
@@ -31,7 +32,7 @@ class Index extends IndexBase
 
   public function index(Request $request)
   {
-    $route_params = explode('/', $request->pathinfo());
+    $route_params = $request->pathinfo() ? explode('/', $request->pathinfo()) : ['index'];
     $route_params_len = count($route_params);
 
     // 提取最后一个pathinfo参数
@@ -57,8 +58,8 @@ class Index extends IndexBase
 
     $where = "CONCAT(parent_dir_path, column_dir_path) = :path";
     $column = $this->columnBusiness->getColumnDetail($where, ['path' => $dir_path]);
-    if (empty($column)) {
-      die('栏目不存在');
+    if (empty($column) || $column['is_show_in_nav'] !== 1) {
+      abort(404, '栏目不存在');
     }
     $catche_tpl_name = root_path() . 'public\\tpl_catche\\home\\' . $tpl_catch_file_name;
 
@@ -80,9 +81,7 @@ class Index extends IndexBase
 
 
     // 判断模板缓存时长是否过期, 在有效期内，则直接读取缓存tpl模板显示
-    // 获取系统配置
-    $system_config = $this->systemConfigBusiness->getConfigValue(['tpl_cache_expire']);
-    if (is_file($catche_tpl_name) && (time() - filemtime($catche_tpl_name) < $system_config['tpl_cache_expire']['value'])) {
+    if ($this->hasValidTplCacheFile($catche_tpl_name)) {
       $this->template->fetch($catche_tpl_name);
       die;
     }
@@ -95,17 +94,22 @@ class Index extends IndexBase
 
       // 获取详情所属的栏目信息
       $dir_path = implode('/', array_slice($route_params, 0, $route_params_len - 1));
-      $nt_cms_model = $this->getColumnModelTplInfo($dir_path);
+      $stars_cms_model = $this->getColumnModelTplInfo($dir_path);
 
-      $model_tb_name = $nt_cms_model['model_tb_name'];
+      $model_tb_name = $stars_cms_model['model_tb_name'];
       // 组装拼接内容对应的数据表模型路径
       $model_str = '\app\common\model\mysql\\' . $model_tb_name;
       // 实例化数据表模型
       $model = new $model_str();
       // 使用id获取详情内容数据
       $detail = $model->getOne(['id' => $id]);
+      $detail['images'] = json_decode($detail['images'], true)??[];
 
-      $tpl = $nt_cms_model['tpl'];
+      if (empty($detail)) {
+        abort(404, '详情不存在');
+      }
+
+      $tpl = $stars_cms_model['tpl'];
       $tpl['content'] = preg_replace('/{\$detail\[\'content\'\]}/', '{$detail[\'content\'] | raw}', $tpl['content']);
 
       $search_params['id'] = $id;
@@ -120,22 +124,33 @@ class Index extends IndexBase
       $dir_path = implode('/', $route_params);
       $dir_path = preg_replace('/_\d+\.html$/', '.html', $dir_path);
       $dir_path = preg_replace('/\.html$/', '', $dir_path);
-      $nt_cms_model = $this->getColumnModelTplInfo($dir_path, $mode);
+      $stars_cms_model = $this->getColumnModelTplInfo($dir_path, $mode);
 
-      $model_tb_name = $nt_cms_model['model_tb_name'];
+      $model_tb_name = $stars_cms_model['model_tb_name'];
       // 组装拼接内容对应的数据表模型路径
       $model_str = '\app\common\model\mysql\\' . $model_tb_name;
       // 实例化数据表模型
       $model = new $model_str();
 
-      $column = $nt_cms_model['column'];
-      $tpl = $nt_cms_model['tpl'];
+      $column = $stars_cms_model['column'];
+      $tpl = $stars_cms_model['tpl'];
 
       if (in_array($column['is_last'], [0, 1])) {
         // 列表
         // 使用column_id获取列表数据
+        $column_children_ids = [];
 
-        $where = ['column_id' => $column['id']];
+        $rid = $column['rid'] === 0 ? $column['id'] : $column['rid'];
+        $column_children = app()->make('\app\common\model\mysql\Column')->getColumnInfoList('*', [['rid', '=', $rid]]);
+
+        $this->utils->getChildrenCategory($column_children_ids, $column_children, $column['id']);
+        $column_children_ids = array_map(function ($v) {
+          return $v['id'];
+        }, $column_children_ids);
+
+        $column_children_ids = array_merge($column_children_ids, [$column['id']]);
+
+        $where = [['column_id', 'IN', $column_children_ids]];
 
         $where_str = '';
 
@@ -169,6 +184,9 @@ class Index extends IndexBase
     /*公共通用数据组装*/
     // 1、头部导航数据列表
     $tpl_var_data['nav_list'] = $this->columnBusiness->getColumnNormalInfoList();
+    $tpl_var_data['nav_list'] = array_filter($tpl_var_data['nav_list'], function ($nav) {
+      return $nav['is_show_in_nav'] === 1;
+    });
     $temp_column_list = [];
     $this->utils->getChildrenCategoryTree($temp_column_list, $tpl_var_data['nav_list'], 0);
     $tpl_var_data['nav_list'] = $temp_column_list;
@@ -182,6 +200,11 @@ class Index extends IndexBase
     // 4、请求参数
     $tpl_var_data['search_params'] = $search_params;
 
+    // 5、版权信息
+    $systemConfigVal = $this->systemConfigBusiness->getConfigValue(['copyright', 'beian']);
+    $tpl_var_data['copyright'] = $systemConfigVal['copyright']['value'];
+    $tpl_var_data['beian'] = $systemConfigVal['beian']['value'];
+
     // 查询数据库提取所有可用状态的公共模板变量数据
     $tpl_var_list = $this->tplVarBusiness->getTplValList();
     // 变量公共模板变量，对模板内容$tpl['content']进行变量字符标识替换
@@ -190,17 +213,17 @@ class Index extends IndexBase
       $tpl['content'] = str_replace($var_mark, $tpl_var['var_value'], $tpl['content']);
     }
 
-    ob_start();
-    $this->template->display($tpl['content'], $tpl_var_data);
+    $template = View::display($tpl['content'], $tpl_var_data);
 
-    if (file_exists($catche_tpl_name)) {
-      $tpl_html = ob_get_contents();
+    // 无有效缓存文件时，将模板内容写入缓存文件
+    if (!$this->hasValidTplCacheFile($catche_tpl_name)) {
       $fp = fopen($catche_tpl_name, 'w');
       if ($fp) {
-        fwrite($fp, $tpl_html);
+        fwrite($fp, $template);
         fclose($fp);
       }
     }
+    return $template;
   }
 
   // 获取栏目、数据表对应模型、模板
@@ -210,12 +233,6 @@ class Index extends IndexBase
 
     if (empty($column)) {
       die('栏目不存在');
-    }
-
-    if ($mode === 'detail') {
-      if ($column['is_last'] !== 1) {
-        die('所属栏目非终极栏目，请调整栏目');
-      }
     }
 
     // 从栏目数据中整理出对应的数据表模型
@@ -256,7 +273,8 @@ class Index extends IndexBase
     }
 
     if (empty($tpl->toArray())) {
-      die('模板获取失败，请设置栏目对应模板');
+      abort(404, '模板获取失败，请设置栏目对应模板');
+      // die('模板获取失败，请设置栏目对应模板');
     }
 
     return [
@@ -264,5 +282,16 @@ class Index extends IndexBase
       'model_tb_name' => $model_tb_name,
       'tpl' => $tpl
     ];
+  }
+
+  /**
+   * 缓存文件是否有效，未过期
+   * @return bool
+   */
+  private function hasValidTplCacheFile($catche_tpl_name)
+  {
+    // 获取系统配置
+    $system_config = $this->systemConfigBusiness->getConfigValue(['tpl_cache_expire']);
+    return (is_file($catche_tpl_name) && (time() - filemtime($catche_tpl_name) < $system_config['tpl_cache_expire']['value']));
   }
 }

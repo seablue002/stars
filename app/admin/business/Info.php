@@ -12,7 +12,7 @@ use app\admin\validate\Info AS InfoValidate;
 
 class Info
 {
-  private $infoModel = null;
+  public $infoModel = null;
   private $utils = null;
   private $columnBusiness = null;
 
@@ -169,6 +169,50 @@ class Info
         // 删除磁盘上的图片资源
         $cover_path = root_path() . 'public\\storage\\' . $info['cover_url'];
         unlink($cover_path);
+      }
+    }
+  }
+
+  public function deleteResource($params) {
+    try {
+      validate(InfoValidate::class)
+        ->scene('delete-resource')
+        ->check(['id'=> $params['info_id'], 'column_id'=> $params['column_id'], 'resource_type' => $params['resource_type'], 'resource_url' => $params['resource_url']]);
+    } catch (ValidateException $e) {
+      throw new Exception($e->getMessage());
+    }
+
+    $field = '';
+    switch ($params['resource_type']) {
+      case 'pic':
+        $field = 'images';
+        break;
+    }
+
+    $info = $this
+      ->infoModel
+      ->where([['id', '=', $params['info_id']]])
+      ->field($field)
+      ->find()
+      ->toArray();
+
+    if (!empty($info)) {
+      // 删除对应资源url
+      $resourceList = json_decode($info[$field], true);
+
+      $resourceList = array_filter($resourceList, function ($resource) use ($params) {
+        return $resource['url'] !== $params['resource_url'];
+      });
+
+      $resourceList = array_values($resourceList);
+      $resourceList = json_encode($resourceList);
+
+      $res = $this->infoModel->updateOne([$field => $resourceList], [['id', '=', $params['info_id']]]);
+      // $res = $service->editFields([['id', '=', $params['info_id']]], [$field => $resourceList]);
+      if ($res) {
+        // 删除磁盘上的对应资源
+        $resourcePath = root_path() . 'public/storage/' . $params['resource_url'];
+        unlink($resourcePath);
       }
     }
   }

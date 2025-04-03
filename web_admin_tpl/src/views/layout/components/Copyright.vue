@@ -1,6 +1,9 @@
 <template>
   <div class="copyright">
-    <p>{{ copyright }} <span>版本{{ appVersion }}</span></p>
+    <p>
+      <span v-html="copyright"></span>
+      &nbsp;<span>版本{{ appVersion }}</span>
+    </p>
   </div>
 </template>
 

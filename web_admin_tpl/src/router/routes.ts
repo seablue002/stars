@@ -15,19 +15,18 @@ export const baseRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Layout',
-    redirect: '/content/info/list'
-    // redirect: '/dashboard',
-    // component: Layout,
-    // children: [
-    //   {
-    //     path: '/dashboard',
-    //     component: () => import('@/views/dashboard/Index.vue'),
-    //     meta: {
-    //       title: '首页',
-    //       icon: 'House'
-    //     }
-    //   }
-    // ]
+    redirect: '/dashboard',
+    component: Layout,
+    children: [
+      {
+        path: '/dashboard',
+        component: () => import('@/views/dashboard/Index.vue'),
+        meta: {
+          title: '首页',
+          icon: 'House'
+        }
+      }
+    ]
   },
   {
     path: '/login',

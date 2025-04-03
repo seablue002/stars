@@ -36,6 +36,7 @@ export interface InfoProps {
   content: string;
   'title_url': string;
   cover: string;
+  images: File[];
   label: string[];
   'publish_time': string;
 }
@@ -93,4 +94,15 @@ export interface DeleteCoverProps {
 export const deleteCoverApi = async (params: DeleteCoverProps): Promise<ReqRes.ResponseResult> => {
   const url = `${API_VERSION}delete-cover`
   return http.get(url, { params })
+}
+
+export interface DeleteResourceProps {
+  'info_id': string;
+  'column_id': string;
+  'resource_type': string;
+  'resource_url': string;
+}
+export const deleteResourceApi = async (data: DeleteResourceProps): Promise<ReqRes.ResponseResult> => {
+  const url = `${API_VERSION}delete-resource`
+  return http.post(url, data)
 }

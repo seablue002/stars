@@ -68,8 +68,16 @@ export default defineComponent({
         name: '首页'
       },
       {
-        path: '/goods',
-        name: '商品信息'
+        path: '/content/info/list',
+        name: '信息管理'
+      },
+      {
+        path: '/tpl/list/list',
+        name: '模板管理'
+      },
+      {
+        path: '/tpl_var/list',
+        name: '模板变量管理'
       }
     ]
     const store = useStore()

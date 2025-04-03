@@ -24,7 +24,7 @@ http.interceptors.request.use(config => {
 /* 响应拦截 */
 http.interceptors.response.use(response => {
   if (isObject(response.data) && response.data.status === HTTP_CONFIG.API_ERROR_CODE) {
-    if (isObject(response.data) && response.data.message === '登录会话已失效，请重新登录！') {
+    if (isObject(response.data) && response.data.data === 'need-login') {
       // 登录状态已经过期，需要重新登录
       // 清空vuex、storage中的当前用户相关信息
       store.commit('clearAdminUserInfo')

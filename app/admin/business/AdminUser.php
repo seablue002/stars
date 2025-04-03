@@ -7,9 +7,6 @@ use app\admin\validate\AdminUser as AdminUserValidate;
 use app\common\model\mysql\AdminUser AS AdminUserModel;
 use think\Exception;
 use think\exception\ValidateException;
-use edward\captcha\facade\CaptchaApi;
-use app\common\lib\Utils;
-use think\facade\Config;
 use think\facade\Cache;
 
 class AdminUser
@@ -27,9 +24,13 @@ class AdminUser
    */
   public function login($data)
   {
-    if (!CaptchaApi::check($data['captcha'], $data['captcha_key'])) {
+
+    $captcha_key = $data['captcha_key'];
+    $code = Cache::store('redis')->get($captcha_key);
+    if (!$code || strtolower($code) !== strtolower($data['captcha'])) {
       throw new Exception('验证码错误');
     }
+    Cache::store('redis')->delete($captcha_key);
 
     try {
       validate(AdminUserValidate::class)

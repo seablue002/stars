@@ -21,7 +21,12 @@
               <el-input v-model="formMdl.var_name" :readonly="isReadOnly" clearable placeholder="请输入变量标识"></el-input>
             </el-form-item>
             <el-form-item prop="var_value" label="模板变量内容" class="tpl-var_value">
-              <el-input v-model="formMdl.var_value" type="textarea" :rows="10"></el-input>
+              <VAceEditor
+                :value="formMdl.var_value"
+                @init="vaceEditorInit"
+                lang="html"
+                theme="chrome">
+              </VAceEditor>
             </el-form-item>
             <el-form-item class="form-footer-opt-btns" v-if="['add', 'edit'].includes(mode)">
               <el-button @click="resetForm">重置</el-button>
@@ -34,7 +39,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, getCurrentInstance, onMounted, nextTick, computed, inject } from 'vue'
+import { defineComponent, ref, shallowRef, getCurrentInstance, onMounted, nextTick, computed, inject } from 'vue'
 import { useStore } from 'vuex'
 import addTplVarRules from '@/validator/tplVar'
 import { HTTP_CONFIG } from '@/config/http'
@@ -47,7 +52,18 @@ import {
   editTplApi
 } from '@/api/tplVar'
 
+import { VAceEditor } from 'vue3-ace-editor'
+import 'ace-builds'
+
+import 'ace-builds/src-noconflict/mode-html'
+import 'ace-builds/src-noconflict/theme-chrome'
+
+import beautify from 'js-beautify'
+
 export default defineComponent({
+  components: {
+    VAceEditor
+  },
   props: {
     mode: {
       type: String,
@@ -85,6 +101,15 @@ export default defineComponent({
       var_value: ''
     })
 
+    const vaceEditorRef = shallowRef()
+    const vaceEditorInit = (instance: any) => {
+      vaceEditorRef.value = instance
+
+      instance.getSession().on('change', () => {
+        formMdl.value.var_value = instance.getValue()
+      })
+    }
+
     const isNeedRefreshLstPage = inject('isNeedRefreshLstPage') as any
 
     const handleSubmit = async () => {
@@ -107,7 +132,7 @@ export default defineComponent({
         category_id: formMdl.value.category_id,
         var_key: formMdl.value.var_key,
         var_name: formMdl.value.var_name,
-        var_value: formMdl.value.var_value
+        var_value: vaceEditorRef.value.getValue()
       }
 
       if (props.mode === 'add') {
@@ -164,7 +189,21 @@ export default defineComponent({
       }
       const { status, data, message } = await tplDetailApi(params)
       if (status === HTTP_CONFIG.API_SUCCESS_CODE && data) {
-        formMdl.value = data
+        const { var_value: varValue, ...extra } = data
+        formMdl.value = {
+          ...extra,
+          var_value: beautify.html(varValue, {
+            indent_size: 2,
+            indent_char: ' ',
+            max_preserve_newline: 0,
+            preserve_newlines: false,
+            keep_array_indentation: false,
+            break_chained_methods: false,
+            indent_scripts: 'normal',
+            brace_style: 'collapse',
+            space_before_conditional: true
+          })
+        }
       } else {
         proxy.message.warning({
           message,
@@ -196,6 +235,7 @@ export default defineComponent({
       submitBtnTit,
       isReadOnly,
       formMdl,
+      vaceEditorInit,
       handleSubmit,
       resetForm,
       getDetail
@@ -206,9 +246,19 @@ export default defineComponent({
 <style lang="scss" scoped>
 .add-tpl-var-form {
   .tpl-var_value {
-    .el-textarea {
-      .el-textarea__inner {
+    :deep(.el-form-item__content) {
+      display: block;
+
+      .ace_editor {
         width: 1000px;
+        height: 550px;
+        min-height: 550px;
+        border: 1px solid rgb(204, 204, 204);
+
+        .ace_gutter,
+        .ace_scrollbar {
+          z-index: 1;
+        }
       }
     }
   }

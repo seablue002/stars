@@ -1,6 +1,6 @@
 {
   "name": "admin-element-tpl",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,11 +10,13 @@
   "dependencies": {
     "@form-create/element-ui": "^3.1.12",
     "@vueup/vue-quill": "^1.0.0-beta.9",
+    "ace-builds": "^1.39.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "echarts": "^5.3.3",
     "element-plus": "^2.2.9",
     "font-awesome": "^4.7.0",
+    "js-beautify": "^1.15.4",
     "js-md5": "^0.7.3",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
@@ -25,6 +27,7 @@
     "sortablejs": "^1.15.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
+    "vue3-ace-editor": "^2.2.4",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

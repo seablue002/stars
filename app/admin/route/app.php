@@ -40,6 +40,8 @@ Route::group(function() {
   Route::post('upload-info-content-pic', 'admin/info/infoContentPicUpload');
   // 删除cover封面
   Route::get('delete-cover', 'admin/info/deleteCover');
+  // 删除资源（栏目数据模型为图片、下载时的图片、文件等资源删除）
+  Route::post('delete-resource', 'admin/info/deleteResource');
 
   // 标签列表
   Route::get('label-list', 'admin/label/list');
@@ -188,6 +190,9 @@ Route::group(function() {
   Route::get('system-config-list-by-cid', 'admin/systemConfig/getListByCid');
   // 保存配置设置
   Route::post('setting-save-system-config', 'admin/systemConfig/settingSave');
+
+  // 获取系统信息
+  Route::get('system-info', 'admin/system/info');
 
 
   // 轮播列表

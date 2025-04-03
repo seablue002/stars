@@ -63,7 +63,6 @@ import { useRouter } from 'vue-router'
 import type { ElForm } from 'element-plus'
 import ListTable from '@/components/ListTable.vue'
 import { HTTP_CONFIG } from '@/config/http'
-import { formateDateStr } from '@/utils'
 import { TABLE_COLUMN_OPTS_TYPE_LIST } from '@/components/EditableTable.vue'
 import { DEFAULT_PAGE_SIZE } from '@/config/pagination'
 import useAutoMainContentHeight from '@/hooks/useAutoMainContentHeight'
@@ -106,12 +105,7 @@ export default defineComponent({
       pageNo: 1,
       pageSize: DEFAULT_PAGE_SIZE
     })
-    const dateFormatMethodConf = {
-      fn: (params: any, ...extra: any) => {
-        return formateDateStr(params * 1000, ...extra)
-      },
-      params: ['YYYY-MM-DD HH:mm:ss']
-    }
+
     const tbHead: any[] = reactive([
       {
         label: '',
@@ -124,17 +118,12 @@ export default defineComponent({
         prop: 'name'
       },
       {
-        label: '绑定的数据模型',
-        prop: 'model_tb_name'
-      },
-      {
         label: '添加时间',
         prop: 'create_time'
       },
       {
         label: '更新时间',
-        prop: 'update_time',
-        formateMethodConf: dateFormatMethodConf
+        prop: 'update_time'
       },
       {
         label: '操作',

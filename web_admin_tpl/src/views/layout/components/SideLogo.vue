@@ -35,7 +35,6 @@ export default defineComponent({
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 16px 10px;
   cursor: pointer;
   user-select: none;
@@ -58,7 +57,7 @@ export default defineComponent({
       margin: 0 0 0 6px;
       color: #fff;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 32px;
       vertical-align: middle;
       animation: title-hide .3s;

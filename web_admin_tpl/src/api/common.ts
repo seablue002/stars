@@ -34,3 +34,8 @@ export const systemConfigApi = async (params: SystemConfigProps): Promise<ReqRes
   const url = `${API_VERSION}system-config`
   return http.get(url, { params })
 }
+
+export const systemInfoApi = async (): Promise<ReqRes.ResponseResult> => {
+  const url = `${API_VERSION}system-info`
+  return http.get(url)
+}

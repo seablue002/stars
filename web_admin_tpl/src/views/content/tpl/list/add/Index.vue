@@ -2,7 +2,7 @@
   <div class="add-tpl PAGE-MAIN-CONTENT">
     <PageHeader :title="hdTitle"></PageHeader>
     <keep-alive>
-      <AddDetailTplForm ref="tplFormRef" :mode="mode"></AddDetailTplForm>
+      <AddListTplForm ref="tplFormRef" :mode="mode"></AddListTplForm>
     </keep-alive>
   </div>
 </template>
@@ -12,11 +12,11 @@ import { useRoute } from 'vue-router'
 import useAutoMainContentHeight from '@/hooks/useAutoMainContentHeight'
 import useFixKeepAliveListRefresh from '@/hooks/useFixKeepAliveListRefresh'
 import PageHeader from '@/components/business/PageHeader.vue'
-import AddDetailTplForm from './components/AddDetailTplForm.vue'
+import AddListTplForm from './components/AddListTplForm.vue'
 export default defineComponent({
   components: {
     PageHeader,
-    AddDetailTplForm
+    AddListTplForm
   },
   setup () {
     const route = useRoute()

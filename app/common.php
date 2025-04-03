@@ -111,7 +111,7 @@ function recursionMachine (&$origin_data, $cb = '') {
   if (is_array($origin_data)) {
     for ($i = 0; $i < count($origin_data); $i++) {
       if (isFunction($cb)) {
-        $cb($origin_data[$i]);
+        $cb($origin_data[$i], $origin_data);
       }
       if (isset($origin_data[$i]['children']) && count($origin_data[$i]['children'])) {
         recursionMachine($origin_data[$i]['children'], $cb);

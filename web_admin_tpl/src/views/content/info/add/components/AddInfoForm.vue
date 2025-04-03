@@ -63,6 +63,40 @@
                   </el-upload>
                   <!-- E 富文本编辑器图片添加辅助 -->
                 </el-form-item>
+                <el-form-item class="form-item-images" prop="images" label="图片">
+                  <el-upload
+                    :on-change="handleChangePicFile"
+                    :before-remove="handleBeforeRemovePicFile"
+                    :auto-upload="false"
+                    :multiple="true"
+                    :file-list="picFileList"
+                    list-type="picture-card"
+                    :limit="50"
+                    :disabled="isReadOnly">
+                    <template #tip v-if="!isReadOnly">
+                      <Tips title="允许上传单张不超过2M的jpg/png图片"></Tips>
+                    </template>
+                    <el-icon v-if="!isReadOnly" class="icon-upload" @click="handleChoosePicFile"><Plus /></el-icon>
+                    <template #file="{ file }">
+                      <el-image
+                        style="width: 100px; height: 100px"
+                        :src="file.url"
+                        :preview-src-list="previewSrcList"
+                        :initial-index="previewSrcList.indexOf(file.url)"
+                        fit="cover"
+                      />
+
+                      <span v-if="!isReadOnly" class="el-upload-list__item-actions">
+                        <span
+                          class="el-upload-list__item-delete"
+                          @click="handleBeforeRemovePicFile(file)"
+                        >
+                          <el-icon><Delete /></el-icon>
+                        </span>
+                      </span>
+                    </template>
+                  </el-upload>
+                </el-form-item>
                 <el-form-item prop="publish_time" label="发布时间">
                   <el-date-picker
                     v-model="formMdl.publish_time"
@@ -98,7 +132,7 @@
 import { defineComponent, ref, getCurrentInstance, onMounted, nextTick, computed, inject } from 'vue'
 import { useStore } from 'vuex'
 import _ from 'lodash'
-import { getTree, formateTree, recursionMachine, getRuleTree as getLabelTree } from '@/utils'
+import { getTree, formateTree, recursionMachine, getRuleTree as getLabelTree, formateResourceUrl, unformatResourceUrl, indexOfObjInObjArrByKey } from '@/utils'
 import addInfoRules from '@/validator/info'
 import { HTTP_CONFIG, API_HOST, API_VERSION } from '@/config/http'
 import { TreeProps, TreeDataKeyMapProps, ROOT_NODE_PID } from '@/components/EditableTree.vue'
@@ -112,7 +146,9 @@ import {
   EditInfoProps,
   editInfoApi,
   DeleteCoverProps,
-  deleteCoverApi
+  deleteCoverApi,
+  DeleteResourceProps,
+  deleteResourceApi
 } from '@/api/info'
 import {
   columnListApi
@@ -237,6 +273,7 @@ export default defineComponent({
       content: '',
       title_url: '',
       cover: '',
+      images: [],
       label: [],
       publish_time: ''
     })
@@ -305,13 +342,22 @@ export default defineComponent({
         label: formMdl.value.label,
         title_url: formMdl.value.title_url,
         cover: formMdl.value.cover,
+        images: formMdl.value.images,
         publish_time: formMdl.value.publish_time
       }
 
       const formData = new FormData()
       for (const attr in data) {
+        if (['images'].includes(attr)) {
+          continue
+        }
         formData.append(attr, (data as any)[attr])
       }
+
+      // 图片集数据组装
+      formMdl.value.images.forEach((image: File, index: number) => {
+        formData.append(`images[${index}]`, image)
+      })
 
       if (props.mode === 'add') {
         loading.value = true
@@ -367,13 +413,19 @@ export default defineComponent({
       }
       const { status, data, message } = await infoDetailApi(params)
       if (status === HTTP_CONFIG.API_SUCCESS_CODE && data) {
-        let { label_ids: labelIds, cover_url: coverUrl, ...extra } = data
+        let { label_ids: labelIds, cover_url: coverUrl, images, ...extra } = data
         formMdl.value = {
           ...formMdl.value,
           ...extra,
           cover: coverUrl
         }
         quillEditorRef.value.setHTML(data.content)
+
+        // 图片集合
+        picFileList.value = images.map((image: {[key: string]: any}) => {
+          const picFullPath = formateResourceUrl(image.url)
+          return { id: picFullPath, name: picFullPath, url: picFullPath }
+        })
 
         labelIds = labelIds.map((label: any) => {
           return Number(label)
@@ -411,6 +463,11 @@ export default defineComponent({
     const resetForm = () => {
       formRef.value.resetFields()
       fileList.value = []
+
+      // 清除上传时候选择的图片，防止下次重复传递
+      formMdl.value.images = []
+      picFileList.value = []
+
       quillEditorRef.value.setText('')
     }
 
@@ -518,6 +575,92 @@ export default defineComponent({
       }
     }
 
+    // 图片集
+    const picFileList = ref<UploadFile[]>([])
+    const previewSrcList = computed(() => {
+      return picFileList.value.map((file) => {
+        return file.url
+      })
+    })
+    const handleChoosePicFile = (e: Event) => {
+      if (isReadOnly.value) {
+        return false
+      }
+      if (formMdl.value.images.length >= 50) {
+        proxy.message({
+          type: 'warning',
+          message: '目前只能上传50张图片, 如需上传可先删除',
+          duration: 1000
+        })
+        e.stopPropagation()
+      }
+    }
+    const handleChangePicFile = (file: UploadFile) => {
+      // 校验图片size大小
+      const sizeValide = 1024 * 1024 * 2
+      // 校验类型
+      const typeValide = ['image/jpeg', 'image/png']
+      if ((file.size as any) > sizeValide) {
+        proxy.message({
+          message: '单张图片大小不能超过2M',
+          type: 'warning'
+        })
+        picFileList.value.splice(-1, 1)
+        return
+      }
+      if (!typeValide.includes((file.raw as any).type)) {
+        proxy.message({
+          message: '图片类型值允许 jpg、png',
+          type: 'warning'
+        })
+        picFileList.value.splice(-1, 1)
+        return
+      }
+      formMdl.value.images.push(file.raw as any)
+    }
+    const handleBeforeRemovePicFile = (uploadFile: UploadFile) => {
+      proxy.$confirm('确定移除图片吗', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const url = unformatResourceUrl(uploadFile.url as string)
+        const isDeleted = await deleteResource(url)
+        if (isDeleted) {
+          const index = indexOfObjInObjArrByKey({ url: uploadFile.url }, picFileList.value, 'url')
+          if (index !== -1) {
+            picFileList.value.splice(index, 1)
+          }
+        }
+      }).catch(() => {
+        return false
+      })
+      return false
+    }
+
+    const deleteResource = async (url = '', type = 'pic') => {
+      const params: DeleteResourceProps = {
+        info_id: formMdl.value.id,
+        column_id: formMdl.value.column_id,
+        resource_type: type,
+        resource_url: url
+      }
+      const { status, message } = await deleteResourceApi(params)
+      if (status === HTTP_CONFIG.API_SUCCESS_CODE) {
+        proxy.message.success({
+          message,
+          duration: 3000
+        })
+        return true
+      } else {
+        proxy.message.warning({
+          message,
+          duration: 3000
+        })
+        return false
+      }
+    }
+
     return {
       token: computed(() => store.state.user.adminUserInfo.token),
       formRules,
@@ -574,7 +717,12 @@ export default defineComponent({
       imgUrl,
       handleChooseFile,
       handleChangeCover,
-      handleBeforeRemoveCover
+      handleBeforeRemoveCover,
+      picFileList,
+      previewSrcList,
+      handleChoosePicFile,
+      handleChangePicFile,
+      handleBeforeRemovePicFile
     }
   }
 })
@@ -614,6 +762,16 @@ export default defineComponent({
         min-height: 400px;
       }
     }
+  }
+  .form-item-images {
+    .el-image {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  .el-tree {
+    width: 100%;
   }
 }
 </style>

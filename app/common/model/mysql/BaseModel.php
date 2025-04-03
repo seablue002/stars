@@ -40,11 +40,12 @@ class BaseModel extends Model
   }
   
   // 获取数据列表，有分页
-  public function getPageList($where=[], $fields='*', $page_size)
+  public function getPageList($where=[], $fields='*', $page_size, $order = [])
   {
     $dataModel = $this
       ->field($fields)
       ->where($where)
+      ->order($order)
       ->paginate($page_size);
 
     return [
@@ -70,10 +71,11 @@ class BaseModel extends Model
   }
   
   // 获取一条数据
-  public function getOne($where=[], $fields='*') {
+  public function getOne($where=[], $fields='*', $order = []) {
     return $this
       ->field($fields)
       ->where($where)
+      ->order($order)
       ->findOrEmpty();
   }
 
