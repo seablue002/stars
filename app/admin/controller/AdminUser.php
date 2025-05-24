@@ -6,22 +6,19 @@ namespace app\admin\controller;
 
 use think\App;
 use think\facade\Config;
-use think\facade\View;
 use think\facade\Db;
 use app\admin\business\AdminUser AS AdminUserBusiness;
-use app\admin\business\AuthRole AS AuthRoleBusiness;
 use app\admin\business\AuthRoleUser AS AuthRoleUserBusiness;
+use app\common\exception\ApiException;
 
 class AdminUser extends AdminBase
 {
   private $adminBusiness = null;
-  private $authRoleBusiness = null;
   private $authRoleUserBusiness = null;
   public function __construct(App $app)
   {
     parent::__construct($app);
     $this->adminBusiness = new AdminUserBusiness;
-    $this->authRoleBusiness = new AuthRoleBusiness;
     $this->authRoleUserBusiness = new AuthRoleUserBusiness;
   }
   
@@ -35,11 +32,9 @@ class AdminUser extends AdminBase
       'name' => input('get.name', ''),
       'page_size' => input('get.size', Config::get('page.page_size'))
     ];
-    try {
-      $admin_list = $this->adminBusiness->getAdminUserList($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('后台用户列表数据获取失败');
-    }
+    
+    $admin_list = $this->adminBusiness->getAdminUserList($params);
+
     return $this->responseMessage->success('后台用户列表数据获取成功', $admin_list);
   }
 
@@ -69,13 +64,12 @@ class AdminUser extends AdminBase
 
       $insert_success_len = $this->authRoleUserBusiness->insertRoleUser($role_user_data);
       if ($insert_success_len !== count($role)) {
-        Db::rollback();
-        throw new Exception('插入用户角色信息失败，管理员添加失败');
+        throw new ApiException('插入用户角色信息失败，管理员添加失败');
       }
       Db::commit();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
       Db::rollback();
-      return $this->responseMessage->error('管理员添加失败');
+      throw $e;
     }
 
     return $this->responseMessage->success('管理员用户添加成功');
@@ -87,13 +81,10 @@ class AdminUser extends AdminBase
       return $this->responseMessage->error('缺少必要参数');
     }
 
-    try {
-      $admin_user_data['admin_role'] = $this->adminBusiness->getAdminUserRole($id);
-      $admin_user_data['admin_info'] = $this->adminBusiness->getOneAdminUserInfo(['id' => $id]);
-      $admin_user_data['id'] = $id;
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $admin_user_data['admin_role'] = $this->adminBusiness->getAdminUserRole($id);
+    $admin_user_data['admin_info'] = $this->adminBusiness->getOneAdminUserInfo(['id' => $id]);
+    $admin_user_data['id'] = $id;
+
     return $this->responseMessage->success('后台用户详情数据获取成功', $admin_user_data);
   }
 
@@ -125,13 +116,12 @@ class AdminUser extends AdminBase
 
       $insert_success_len = $this->authRoleUserBusiness->editRoleUser($role_user_data);
       if ($insert_success_len !== count($role)) {
-        Db::rollback();
-        throw new Exception('插入用户角色信息失败，管理员添加失败');
+        throw new ApiException('插入用户角色信息失败，管理员添加失败');
       }
       Db::commit();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
       Db::rollback();
-      return $this->responseMessage->error($e->getMessage());
+      throw $e;
     }
 
     return $this->responseMessage->success('管理员用户编辑成功');

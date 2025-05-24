@@ -6,8 +6,6 @@ namespace app\admin\business;
 
 use app\admin\validate\AuthRule as AuthRuleValidate;
 use app\common\model\mysql\AuthRule AS AuthRuleModel;
-use think\Exception;
-use think\exception\ValidateException;
 use app\common\lib\Utils;
 
 class AuthRule
@@ -51,13 +49,11 @@ class AuthRule
       'create_time' => $time,
       'update_time' => $time
     ]);
-    try {
-      validate(AuthRuleValidate::class)
+    
+    validate(AuthRuleValidate::class)
         ->scene('add')
         ->check($rule_data);
-    } catch (ValidateException $e) {
-      throw new ValidateException($e->getMessage());
-    }
+    
     return $this->authRuleModel->insertOneData($rule_data);
   }
   
@@ -66,13 +62,10 @@ class AuthRule
     $rule_data = array_merge($data, [
       'update_time' => $time
     ]);
-    try {
-      validate(AuthRuleValidate::class)
+    
+    validate(AuthRuleValidate::class)
         ->scene('edit')
         ->check($rule_data);
-    } catch (ValidateException $e) {
-      throw new ValidateException($e->getMessage());
-    }
   
     $where = [
       'id' => $data['id']

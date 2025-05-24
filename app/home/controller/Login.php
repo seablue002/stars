@@ -23,22 +23,15 @@ class Login extends IndexBase
       'password'  => input('post.pwd', '')
     ];
 
-    try {
-      $user_data = $this->userBusiness->login($user);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('登录失败');
-    }
+    $user_data = $this->userBusiness->login($user);
 
     return $this->responseMessage->success('登录成功', $user_data);
   }
 
   public function loginOut (Request $request) {
     $user_id = $request->payload->id;
-    try {
-      $this->userBusiness->out($user_id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('退出登录失败');
-    }
+
+    $this->userBusiness->out($user_id);
 
     return $this->responseMessage->success('退出登录成功');
   }

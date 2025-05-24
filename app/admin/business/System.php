@@ -3,56 +3,10 @@
 
 namespace app\admin\business;
 
-use app\admin\validate\SystemArticle as ArticleValidate;
-use think\Exception;
-use think\exception\ValidateException;
 use think\facade\Db;
-use think\facade\Config;
 
 class System
 {
-  public function getArticleList ($params) {
-    $where = '1 = 1';
-    $pageSize = $params['page_size'];
-    $offset = ($params['page'] - 1) * $pageSize;
-    $limit = " LIMIT {$offset}, {$pageSize}";
-
-    $article_list_sql = "SELECT * FROM web_system_article WHERE {$where} ORDER BY create_time DESC {$limit}";
-    $article_list = Db::query($article_list_sql);
-
-    $article_list_total_sql = "SELECT COUNT(id) total FROM web_system_article WHERE {$where}";
-    $article_list_total = Db::query($article_list_total_sql);
-
-    return [
-      'data' => $article_list,
-      'total' => $article_list_total[0]['total']
-    ];
-  }
-
-  public function updateArticle ($params) {
-    try {
-      validate(ArticleValidate::class)
-        ->scene('update')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
-
-    $success_update_len = Db::table('web_system_article')->update($params);
-  }
-
-  public function articleDetail ($params) {
-    try {
-      validate(ArticleValidate::class)
-        ->scene('detail')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
-
-    return Db::table('web_system_article')->find($params);
-  }
-
   public function getDicList ($dicTypeKeys) {
     $dicList = [];
     foreach ($dicTypeKeys as $dicTypeKey) {

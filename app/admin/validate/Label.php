@@ -32,6 +32,7 @@ class Label extends Validate
   protected $scene = [
     'add' => ['name', 'pid', 'rid', 'create_time'],
     'edit' => ['id', 'name', 'pid', 'rid', 'update_time'],
-    'detail' => ['id']
+    'detail' => ['id'],
+    'delete' => ['id']
   ];
 }

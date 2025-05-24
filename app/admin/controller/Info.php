@@ -27,15 +27,14 @@ class Info extends AdminBase
     $params = [
       'column_id' => input('get.column_id', ''),
       'title' => input('get.title', ''),
+      'create_time' => input('get.create_time', []),
       'page_size' => input('get.size', config('page.page_size'))
     ];
 
-    try {
-      $title_list = $this->infoBusiness->getInfoListWithPage($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('信息列表数据获取失败'.$e->getMessage());
-    }
-    return $this->responseMessage->success('信息列表数据获取成功', $title_list);
+ 
+    $list = $this->infoBusiness->getInfoListWithPage($params);
+    
+    return $this->responseMessage->success('信息列表数据获取成功', $list);
   }
 
   // 信息列表
@@ -45,11 +44,8 @@ class Info extends AdminBase
       'column_id' => input('get.column_id', '')
     ];
 
-    try {
-      $title_list = $this->infoBusiness->getListByCid($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('信息列表数据获取失败'.$e->getMessage());
-    }
+    $title_list = $this->infoBusiness->getListByCid($params);
+
     return $this->responseMessage->success('信息列表数据获取成功', $title_list);
   }
 
@@ -67,35 +63,32 @@ class Info extends AdminBase
       'publish_time' => strtotime(input('post.publish_time'))
     ];
 
-    try {
-      if (isset($_FILES['cover']) && !empty($_FILES['cover'])) {
-        $cover_file                 = new UploadedFile($_FILES['cover']['tmp_name'], $_FILES['cover']['name'], $_FILES['cover']['type'], $_FILES['cover']['error']);
-        $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
-        $data['cover_url'] = str_replace('\\','/', $url);
-      }
-
-      // 图片集合处理
-      if (isset($_FILES['images']) && !empty($_FILES['images'])) {
-        $picFiles = $_FILES['images'];
-
-        if (!empty($picFiles)) {
-          $picsData = [];
-          foreach ($picFiles['name'] as $key => $name) {
-            $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
-            $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
-            // 组装存储在数据库中的图片集合信息
-            $picsData[] = [
-              'url' => str_replace('\\','/', $url)
-            ];
-          }
-          $data['images'] = json_encode($picsData);
-        }
-      }
-
-      $this->infoBusiness->insertInfo($data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
+    if (isset($_FILES['cover']) && !empty($_FILES['cover'])) {
+      $cover_file                 = new UploadedFile($_FILES['cover']['tmp_name'], $_FILES['cover']['name'], $_FILES['cover']['type'], $_FILES['cover']['error']);
+      $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
+      $data['cover_url'] = str_replace('\\','/', $url);
     }
+
+    // 图片集合处理
+    if (isset($_FILES['images']) && !empty($_FILES['images'])) {
+      $picFiles = $_FILES['images'];
+
+      if (!empty($picFiles)) {
+        $picsData = [];
+        foreach ($picFiles['name'] as $key => $name) {
+          $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
+          $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
+          // 组装存储在数据库中的图片集合信息
+          $picsData[] = [
+            'url' => str_replace('\\','/', $url)
+          ];
+        }
+        $data['images'] = json_encode($picsData);
+      }
+    }
+
+    $this->infoBusiness->insertInfo($data);
+
     return $this->responseMessage->success('信息添加成功');
   }
 
@@ -103,13 +96,10 @@ class Info extends AdminBase
   public function detail()
   {
     $id = input('get.id', 0, 'intval');
-    try {
-      $detail = $this->infoBusiness->getInfoDetail($id);
 
-      $detail['images'] = $detail['images'] ? json_decode($detail['images']) : [];
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $detail = $this->infoBusiness->getInfoDetail($id);
+
+    $detail['images'] = $detail['images'] ? json_decode($detail['images']) : [];
 
     return $this->responseMessage->success('信息详情数据获取成功', $detail);
   }
@@ -128,42 +118,52 @@ class Info extends AdminBase
       'label_ids' => input('post.label'),
       'publish_time' => strtotime(input('post.publish_time'))
     ];
-    try {
-      if (isset($_FILES['cover'])) {
-        $cover_file                 = new UploadedFile($_FILES['cover']['tmp_name'], $_FILES['cover']['name'], $_FILES['cover']['type'], $_FILES['cover']['error']);
-        $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
-        $data['cover_url'] = str_replace('\\','/', $url);
-      }
 
-      // 图片集合处理
-      if (isset($_FILES['images']) && !empty($_FILES['images'])) {
-        $picFiles = $_FILES['images'];
-
-        if (!empty($picFiles)) {
-          $picsData = [];
-          foreach ($picFiles['name'] as $key => $name) {
-            $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
-            $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
-            // 组装存储在数据库中的图片集合信息
-            $picsData[] = [
-              'url' => str_replace('\\','/', $url)
-            ];
-          }
-          $detail = $this->infoBusiness->infoModel
-          ->where(['id' => $data['id']])
-          ->field("images")
-          ->find()
-          ->toArray();
-          $detail['images'] = json_decode($detail['images']) ?? [];
-          $data['images'] = json_encode(array_merge($picsData, $detail['images']));
-        }
-      }
-
-      $this->infoBusiness->updateInfo($data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
+    if (isset($_FILES['cover'])) {
+      $cover_file                 = new UploadedFile($_FILES['cover']['tmp_name'], $_FILES['cover']['name'], $_FILES['cover']['type'], $_FILES['cover']['error']);
+      $url                       = Filesystem::disk('public')->putFile('info_cover', $cover_file);
+      $data['cover_url'] = str_replace('\\','/', $url);
     }
-    return $this->responseMessage->success('信息编辑成功');
+
+    // 图片集合处理
+    if (isset($_FILES['images']) && !empty($_FILES['images'])) {
+      $picFiles = $_FILES['images'];
+
+      if (!empty($picFiles)) {
+        $picsData = [];
+        foreach ($picFiles['name'] as $key => $name) {
+          $image_file                 = new UploadedFile($picFiles['tmp_name'][$key], $picFiles['name'][$key], $picFiles['type'][$key], $picFiles['error'][$key]);
+          $url                       = Filesystem::disk('public')->putFile('info_images', $image_file);
+          // 组装存储在数据库中的图片集合信息
+          $picsData[] = [
+            'url' => str_replace('\\','/', $url)
+          ];
+        }
+        $detail = $this->infoBusiness->infoModel
+        ->where(['id' => $data['id']])
+        ->field("images")
+        ->find()
+        ->toArray();
+
+        $detail['images'] = $detail['images'] ? json_decode($detail['images']) : [];
+        $data['images'] = json_encode(array_merge($picsData, $detail['images']));
+      }
+    }
+
+    $res = $this->infoBusiness->updateInfo($data);
+
+    return $this->responseMessage->success('信息编辑成功', $res);
+  }
+
+  // 删除信息
+  public function delete() {
+    $data = [
+      'id' => input('post.id', 0, 'intval'),
+    ];
+
+    $this->infoBusiness->deleteInfo($data);
+    
+    return $this->responseMessage->success('删除成功');
   }
 
   public function infoContentPicUpload () {
@@ -174,11 +174,9 @@ class Info extends AdminBase
 
   public function deleteCover () {
     $info_id = input('get.info_id', 0);
-    try {
-      $this->infoBusiness->deleteCover($info_id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('删除封面图失败');
-    }
+
+    $this->infoBusiness->deleteCover($info_id);
+
     return $this->responseMessage->success('删除封面图成功');
   }
 
@@ -190,11 +188,9 @@ class Info extends AdminBase
       'resource_type' => input('post.resource_type', 'pic'),
       'resource_url' => input('post.resource_url', ''),
     ];
-    try {
-      $this->infoBusiness->deleteResource($data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('删除失败'.$e->getMessage());
-    }
+
+    $this->infoBusiness->deleteResource($data);
+    
     return $this->responseMessage->success('删除成功');
   }
 }

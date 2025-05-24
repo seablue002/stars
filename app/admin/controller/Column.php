@@ -25,11 +25,8 @@ class Column extends AdminBase
   // 栏目列表
   public function list()
   {
-    try {
-      $column_list = $this->columnBusiness->getColumnNormalInfoList();
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $column_list = $this->columnBusiness->getColumnNormalInfoList();
+    
     return $this->responseMessage->success('栏目列表数据获取成功', $column_list);
   }
 
@@ -40,22 +37,16 @@ class Column extends AdminBase
       'rid' => input('get.rid', '')
     ];
 
-    try {
-      $label_list = $this->columnBusiness->getListByRid($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('栏目列表数据获取失败'.$e->getMessage());
-    }
+    $label_list = $this->columnBusiness->getListByRid($params);
+    
     return $this->responseMessage->success('栏目列表数据获取成功', $label_list);
   }
 
   // 栏目列表，基本信息
   public function baseList()
   {
-    try {
-      $column_list = $this->columnBusiness->getColumnBaseInfoList();
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $column_list = $this->columnBusiness->getColumnBaseInfoList();
+    
     return $this->responseMessage->success('栏目基本信息列表数据获取成功', $column_list);
   }
 
@@ -73,8 +64,9 @@ class Column extends AdminBase
       'model_tb_name'  => input('post.model_tb_name'),
       'list_temp_id'  => input('post.list_temp_id'),
       'detail_temp_id'  => input('post.detail_temp_id'),
-      'keywords'  => input('post.keywords'),
-      'description'  => input('post.description'),
+      'seo_title'  => input('post.seo_title'),
+      'seo_keywords'  => input('post.seo_keywords'),
+      'seo_description'  => input('post.seo_description'),
       'sort' => input('post.sort', 0, 'intval')
     ];
     $extra_fields = json_decode(input('post.extra_fields'), true);
@@ -92,9 +84,9 @@ class Column extends AdminBase
       $extra_fields_params  = array_merge($extra_fields, $extra_fields_params);
       $this->columnExtendFieldsBusiness->saveConfig($extra_fields_params);
       Db::commit();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
       Db::rollback();
-      return $this->responseMessage->error($e->getMessage());
+      throw $e;
     }
     return $this->responseMessage->success('栏目添加成功');
   }
@@ -103,11 +95,8 @@ class Column extends AdminBase
   public function detail()
   {
     $id = input('get.id', 0, 'intval');
-    try {
-      $column_data = $this->columnBusiness->getColumnDetail($id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    
+    $column_data = $this->columnBusiness->getColumnDetail($id);
 
     return $this->responseMessage->success('栏目详情数据获取成功', $column_data);
   }
@@ -127,8 +116,9 @@ class Column extends AdminBase
       'model_tb_name'  => input('post.model_tb_name'),
       'list_temp_id'  => input('post.list_temp_id'),
       'detail_temp_id'  => input('post.detail_temp_id'),
-      'keywords'  => input('post.keywords'),
-      'description'  => input('post.description'),
+      'seo_title'  => input('post.seo_title'),
+      'seo_keywords'  => input('post.seo_keywords'),
+      'seo_description'  => input('post.seo_description'),
       'sort' => input('post.sort', 0, 'intval')
     ];
     $extra_fields = json_decode(input('post.extra_fields'), true);
@@ -146,20 +136,30 @@ class Column extends AdminBase
       $extra_fields_params  = array_merge($extra_fields, $extra_fields_params);
       $this->columnExtendFieldsBusiness->saveConfig($extra_fields_params);
       Db::commit();
-    } catch (\Exception $e) {
+    } catch (\Throwable $e) {
       Db::rollback();
-      return $this->responseMessage->error($e->getMessage());
+      throw $e;
     }
     return $this->responseMessage->success('栏目编辑成功');
   }
 
+  // 删除栏目
+  public function delete()
+  {
+    $data = [
+      'id' => input('get.id', 0, 'intval')
+    ];
+
+    $this->columnBusiness->delete($data);
+ 
+    return $this->responseMessage->success('删除成功');
+  }
+
   public function deleteCover () {
     $column_id = input('get.column_id', 0);
-    try {
-      $this->columnBusiness->deleteCover($column_id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('删除栏目封面图失败');
-    }
+    
+    $this->columnBusiness->deleteCover($column_id);
+    
     return $this->responseMessage->success('删除栏目封面图成功');
   }
 }

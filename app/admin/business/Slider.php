@@ -5,8 +5,6 @@ namespace app\admin\business;
 
 
 use app\admin\validate\Slider as SliderValidate;
-use think\Exception;
-use think\exception\ValidateException;
 use think\facade\Db;
 
 class Slider
@@ -39,13 +37,10 @@ class Slider
     $params = array_merge($params, [
       'create_time' => time()
     ]);
-    try {
-      validate(SliderValidate::class)
-        ->scene('add')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(SliderValidate::class)
+      ->scene('add')
+      ->check($params);
 
     return Db::table('web_slider')->insert($params);
   }
@@ -54,25 +49,18 @@ class Slider
     $params = array_merge($params, [
       'update_time' => time()
     ]);
-    try {
-      validate(SliderValidate::class)
-        ->scene('update')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(SliderValidate::class)
+      ->scene('update')
+      ->check($params);
 
     return Db::table('web_slider')->update($params);
   }
 
   public function delete ($params) {
-    try {
-      validate(SliderValidate::class)
-        ->scene('delete')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(SliderValidate::class)
+      ->scene('delete')
+      ->check($params);
 
     $slider_path = Db::table('web_slider')->field('url')->find($params);
 
@@ -84,13 +72,9 @@ class Slider
   }
 
   public function detail ($params) {
-    try {
-      validate(SliderValidate::class)
-        ->scene('detail')
-        ->check($params);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(SliderValidate::class)
+      ->scene('detail')
+      ->check($params);
 
     return Db::table('web_slider')->field(['id', 'name', 'page_url', 'url AS slider', 'sort', 'status', 'remarks'])->find($params);
   }

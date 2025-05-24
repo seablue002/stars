@@ -1,262 +1,396 @@
 <template>
-  <div class="system-config-category PAGE-MAIN-CONTENT">
-    <FlexBlock
-      :leftStyles="flexBlockLeftStyles"
-      :centerStyles="flexBlockCenterStyles"
-      :rightStyles="flexBlockRightStyles">
+  <div class="page-container page-container--bg PAGE-MAIN-CONTENT">
+    <NTFoldingBox
+      :leftStyles="foldingBoxLeftStyles"
+      :rightStyles="foldingBoxRightStyles"
+      >>
       <template #left>
-        <ColumnEditableTree
-          :mode="columnEditableTreeMode"
+        <NTEditableColumnTree
+          ref="editableColumnTreeRef"
           :availableIsLastVal="[0, 1]"
-          @add-category="columnEditableTreeMode = 'add'"
-          @edit-category="columnEditableTreeMode = 'edit'"
-          @select-row="handleSelectInfoRow">
-        </ColumnEditableTree>
+          @init-column-list="handleInitColumnList"
+          @select-row="handleSelectInfoRow"
+        >
+        </NTEditableColumnTree>
       </template>
+
       <template #right>
-        <InfoListTable
-          title="信息列表"
-          :tbHead="tbHead"
-          :tbData="tbData"
-          :tbIsLoading="tbIsLoading"
-          @refresh="handleRefresh"
-          @edit="handleEdit"
-          @size-change="handlePageSizeChange"
-          @current-change="handleCurrentPageChange">
-          <template #head>
-            <div class="table-search">
-              <el-form
-                ref="searchFormRef"
-                :inline="true"
-                :model="searchForm"
-                label-width="100px"
-              >
-                <el-form-item label="标题" prop="label">
+        <el-card shadow="never" class="border-0">
+          <!-- S 搜索表单 -->
+          <NTSearchFormFilter
+            ref="searchFormFilterRef"
+            :model="searchFormFilter"
+            :inline="true"
+            label-width="80"
+            label-position="left"
+            :btnsCol="{ lg: 12 }"
+            :loading="loadding"
+            :isShowFoldUnfoldBtn="false"
+            :searchHandle="handleSearch"
+            :resetHandle="handleReset"
+          >
+            <template #default>
+              <NTSearchFormFilterItem>
+                <el-form-item label="标题:" prop="title">
                   <el-input
-                    v-model="searchForm.title"
+                    v-model.trim="searchFormFilter.title"
                     clearable
                     placeholder="请输入标题"
-                  ></el-input>
+                    @clear="handleSearch"
+                  />
                 </el-form-item>
-                <el-form-item class="opts-btn">
-                  <el-button
-                    plain
-                    @click.stop="handleResetSearchForm(searchFormRef)"
-                  >
-                    重置
-                  </el-button>
-                  <el-button
-                    :loading="tbIsLoading"
-                    type="primary"
-                    icon="search"
-                    @click.stop="handleSearch"
-                  >
-                    查询
-                  </el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-          </template>
-          <template #opts>
-            <el-button
-              type="primary"
-              icon="plus"
-              @click.stop="$router.push({ path: '/content/info/add' })"
-            >
-              添加信息
-            </el-button>
-          </template>
-        </InfoListTable>
-      </template>
-    </FlexBlock>
+              </NTSearchFormFilterItem>
 
+              <NTSearchFormFilterItem :xl="10">
+                <el-form-item label="创建时间" prop="create_time">
+                  <el-date-picker
+                    v-model="searchFormFilter.create_time"
+                    type="datetimerange"
+                    align="right"
+                    unlink-panels
+                    value-format="YYYY-MM-DD HH:mm:ss"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    clearable
+                    @change="handleSearch"
+                    @clear="handleSearch"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </NTSearchFormFilterItem>
+            </template>
+          </NTSearchFormFilter>
+          <!-- E 搜索表单 -->
+
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+              <el-button type="primary" @click="handleAdd">
+                <i class="ri-add-line"></i>
+                添加
+              </el-button>
+            </el-col>
+          </el-row>
+
+          <!-- S 表格列表 -->
+          <NTCustomTable
+            ref="tableRef"
+            v-loading="loadding"
+            :data="dataList"
+            :columns="columns"
+            stripe
+            :show-overflow-tooltip="true"
+            :pagination="pagination"
+            @page-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+          >
+            <template #otherOperate="{ row }">
+              <el-button
+                type="primary"
+                text
+                size="small"
+                @click="handleDetail(row)"
+                >详情
+              </el-button>
+              <el-button
+                type="primary"
+                text
+                size="small"
+                @click="handleEdit(row)"
+                >编辑
+              </el-button>
+              <el-button
+                type="danger"
+                text
+                size="small"
+                @click="handleDelete(row)"
+              >
+                删除
+              </el-button>
+            </template>
+          </NTCustomTable>
+          <!-- E 表格列表 -->
+        </el-card>
+      </template>
+    </NTFoldingBox>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, reactive, ref, getCurrentInstance } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
+import { defineComponent, ref, onMounted, resolveComponent, h } from 'vue'
+import useCurrentInstance from '@/hooks/business/useCurrentInstance'
+import useListPage from '@/hooks/business/useListPage'
 import useAutoMainContentHeight from '@/hooks/useAutoMainContentHeight'
-import { TABLE_COLUMN_OPTS_TYPE_LIST } from '@/components/EditableTable.vue'
-import { TreeProps } from '@/components/EditableTree.vue'
-import FlexBlock from '@/components/FlexBlock.vue'
-import ColumnEditableTree from '@/components/business/ColumnEditableTree.vue'
-import InfoListTable from '@/components/business/InfoListTable.vue'
-import type { ElForm } from 'element-plus'
-import { HTTP_CONFIG } from '@/config/http'
-import { DEFAULT_PAGE_SIZE } from '@/config/pagination'
-import {
-  InfoListProps,
-  infoListApi
-} from '@/api/info'
-type FormInstance = InstanceType<typeof ElForm>
+import useCachedPageJudgmentRefresh from '@/hooks/useCachedPageJudgmentRefresh'
+import { API_HOST } from '@/settings/config/http'
+
 export default defineComponent({
-  components: {
-    FlexBlock,
-    ColumnEditableTree,
-    InfoListTable
-  },
-  setup () {
-    const { proxy } = (getCurrentInstance() as any)
+  name: 'InfoList',
+  setup() {
     const { mainContentDomH } = useAutoMainContentHeight()
+    const { $api, $apiCode, $message, $confirm, $date, router } =
+      useCurrentInstance()
+    const { formatDate } = $date
+    const { executeRefreshJudgment } = useCachedPageJudgmentRefresh()
 
-    const router = useRouter()
-
-    const columnEditableTreeMode = ref('add')
-
-    const flexBlockLeftStyles = ref({})
-    flexBlockLeftStyles.value = {
-      height: mainContentDomH
-    }
-    const flexBlockCenterStyles = ref({})
-    flexBlockCenterStyles.value = {
-      'min-height': mainContentDomH
-    }
-    const flexBlockRightStyles = ref({})
-    flexBlockRightStyles.value = {
-      'min-height': mainContentDomH
+    const foldingBoxLeftStyles = ref({})
+    foldingBoxLeftStyles.value = {
+      height: mainContentDomH,
     }
 
-    // 搜索
-    const searchFormRef = ref()
-    const searchForm = reactive({
+    const foldingBoxRightStyles = ref({})
+    foldingBoxRightStyles.value = {
+      'min-height': mainContentDomH,
+    }
+
+    const tableRef = ref(null)
+
+    // 筛选条件
+    const searchFormFilterRef = ref(null)
+    const searchFormFilter = ref({
+      column_id: null,
       title: '',
-      column_id: ''
+      create_time: [],
     })
-    const handleSearch = () => {
-      tbData.pageNo = 1
-      getInfoList()
-    }
-    const handleResetSearchForm = (formEl: FormInstance) => {
-      formEl.resetFields()
-    }
 
-    const dateFormatMethodConf = {
-      fn: (params: any, ...extra: any) => {
-        return proxy.formateDateStr(params * 1000, ...extra)
-      },
-      params: ['YYYY-MM-DD HH:mm:ss']
-    }
-
-    // 列表
-    const tbIsLoading = ref(false)
-    const tbData = reactive({
-      data: [],
-      total: 0,
-      pageNo: 1,
-      pageSize: DEFAULT_PAGE_SIZE
-    })
-    const tbHead: any[] = reactive([
+    // 列表列配置
+    const columns = [
       {
-        label: '',
+        label: '#',
         prop: '$index',
-        width: 50,
-        overflowTips: false
+        width: 80,
       },
       {
         label: '标题',
-        prop: 'title'
+        prop: 'title',
       },
       {
         label: '副标题',
-        prop: 'sub_title'
+        prop: 'sub_title',
+      },
+      {
+        label: '封面',
+        prop: 'cover_url',
+        dataFormatConf: {
+          renderType: 'html',
+          withScopeRow: true,
+          formatFunction: ({ value }) => {
+            if (value === '') {
+              const component = {
+                setup() {
+                  return () => {
+                    return h('span', null, '无')
+                  }
+                },
+              }
+
+              return component
+            }
+
+            const cover = `${API_HOST}storage/${value}`
+            const component = {
+              setup() {
+                const ElImage = resolveComponent('ElImage')
+                return () => {
+                  return h(ElImage, {
+                    src: cover,
+                    fit: 'cover',
+                    'preview-src-list': [cover],
+                    'preview-teleported': true,
+                    'hide-on-click-modal': true,
+                    class: 'cover',
+                  })
+                }
+              },
+            }
+
+            return component
+          },
+        },
+        minWidth: 60,
       },
       {
         label: '发布时间',
         prop: 'publish_time',
-        formateMethodConf: dateFormatMethodConf,
-        sortable: true
+        dataFormatConf: {
+          formatFunction: (value) => {
+            return formatDate(value * 1000)
+          },
+        },
       },
       {
         label: '创建时间',
         prop: 'create_time',
-        sortable: true
       },
       {
         label: '操作',
         prop: 'TABLE_COLUMN_OPTS',
-        tbColumnOptsTypeList: [
-          TABLE_COLUMN_OPTS_TYPE_LIST.EDIT
-        ],
-        width: 150,
-        minWidth: 150
+        fixed: 'right',
+        width: 200,
+        overflowTooltip: false,
+      },
+    ]
+
+    // 获取数据列表
+    const getDataList = async () => {
+      loadding.value = true
+
+      const {
+        column_id: columnId,
+        title,
+        create_time: createTime,
+      } = searchFormFilter.value
+
+      const { currentPage: page, pageSize: size } = tableRef.value.ntTableRef
+      const params = {
+        column_id: columnId,
+        title,
+        create_time: createTime,
+        page,
+        size,
       }
-    ])
-    const getInfoList = async () => {
-      const params: InfoListProps = {
-        title: searchForm.title,
-        column_id: searchForm.column_id,
-        page: tbData.pageNo,
-        size: tbData.pageSize
-      }
-      tbIsLoading.value = true
-      const { status, data, message } = await infoListApi(params)
-      if (status === HTTP_CONFIG.API_SUCCESS_CODE) {
-        tbData.data = data.data
-        tbData.total = data.total
+
+      const apiRes = await $api.info.infoListApi(params).catch((error) => {
+        $message.error({
+          message: error,
+          duration: 3000,
+        })
+        setTimeout(() => {
+          // 解决loadding闪烁
+          loadding.value = false
+        }, 150)
+      })
+
+      const { status, data, message } = apiRes.data
+      if (status === $apiCode.SUCCESS && data) {
+        const { data: list, total } = data
+        dataList.value = list
+        pagination.value.total = total
       } else {
-        proxy.message({
-          type: 'warning',
+        $message.error({
           message,
-          duration: 3000
+          duration: 3000,
         })
       }
-      tbIsLoading.value = false
+      setTimeout(() => {
+        // 解决loadding闪烁
+        loadding.value = false
+      }, 150)
     }
-    getInfoList()
 
-    // 刷新
-    const handleRefresh = () => {
-      handleResetSearchForm(searchFormRef.value)
+    executeRefreshJudgment(getDataList)
+
+    const {
+      pagination,
+      list: dataList,
+      loadding,
+      handleCurrentChange,
+      handleSizeChange,
+      handleSearch,
+      handleReset,
+    } = useListPage({
+      searchFormFilterRef,
+      tableRef,
+      getDataList,
+    })
+
+    onMounted(() => {
       handleSearch()
-    }
+    })
 
-    // 每页数据显示条数变化响应处理
-    const handlePageSizeChange = async ({ size }: {size: number}) => {
-      tbData.pageSize = size
-      getInfoList()
-    }
-    const handleCurrentPageChange = async ({ page }: {page: number}) => {
-      tbData.pageNo = page
-      getInfoList()
+    const handleAdd = () => {
+      router.push({ path: '/content/info/add' })
     }
 
     // 编辑
-    const handleEdit = ({ data: { id } }: any) => {
+    const handleEdit = ({ id }) => {
       router.push({ path: '/content/info/edit', query: { id } })
     }
 
+    // 详情
+    const handleDetail = ({ id }) => {
+      router.push({ path: '/content/info/detail', query: { id } })
+    }
+
+    // 删除
+    const handleDelete = (row) => {
+      $confirm('确定删除信息吗？', '提示', {
+        type: 'warning',
+      })
+        .then(async () => {
+          await deleteInfo(row)
+        })
+        .catch(() => {})
+    }
+
+    const deleteInfo = async ({ id }) => {
+      const data = {
+        id,
+      }
+      const apiRes = await $api.info.deleteInfoApi(data)
+      const { status, message } = apiRes.data
+      if (status === $apiCode.SUCCESS) {
+        getDataList()
+        $message.success({
+          message,
+          duration: 3000,
+        })
+      } else {
+        $message.warning({
+          message,
+          duration: 3000,
+        })
+      }
+    }
+
     // 选中信息栏目
-    const handleSelectInfoRow = (data: TreeProps) => {
-      searchForm.column_id = data.id
-      getInfoList()
+    const editableColumnTreeRef = ref()
+
+    const handleInitColumnList = (list) => {
+      const columnList = list.filter((column) => {
+        return column.is_last === 1
+      })
+
+      if (columnList.length) {
+        editableColumnTreeRef.value.editableTreeRef.elTreeRef.setCurrentKey(
+          columnList[0].id
+        )
+        handleSelectInfoRow(columnList[0])
+      }
+    }
+    const handleSelectInfoRow = (data) => {
+      searchFormFilter.value.column_id = data.id
+      if (data.id) {
+        handleReset()
+      }
     }
 
     return {
-      columnEditableTreeMode,
-      flexBlockLeftStyles,
-      flexBlockCenterStyles,
-      flexBlockRightStyles,
-      searchFormRef,
-      searchForm,
+      foldingBoxLeftStyles,
+      foldingBoxRightStyles,
+      tableRef,
+      searchFormFilterRef,
+      searchFormFilter,
+      loadding,
+      columns,
+      pagination,
+      dataList,
+      handleCurrentChange,
+      handleSizeChange,
       handleSearch,
-      handleResetSearchForm,
-      tbIsLoading,
-      tbData,
-      tbHead,
-      getInfoList,
-      handleRefresh,
-      handlePageSizeChange,
-      handleCurrentPageChange,
+      handleReset,
+      handleAdd,
       handleEdit,
-      handleSelectInfoRow
+      handleDetail,
+      handleDelete,
+      editableColumnTreeRef,
+      handleInitColumnList,
+      handleSelectInfoRow,
     }
-  }
+  },
 })
 </script>
 <style lang="scss" scoped>
-.table-search {
-  padding: 10px 0 0;
-  background: #fff;
-  margin-bottom: 5px;
+:deep(.cover) {
+  width: 65px;
 }
 </style>

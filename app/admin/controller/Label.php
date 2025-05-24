@@ -19,12 +19,8 @@ class Label extends AdminBase
   // 标签列表
   public function list()
   {
-    try {
-      $label_list = $this->labelBusiness->getLabelNormalInfoList();
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
-    return $this->responseMessage->success('标签列表数据获取成功', $label_list);
+    $list = $this->labelBusiness->getLabelNormalInfoList();
+    return $this->responseMessage->success('标签列表数据获取成功', $list);
   }
 
   // 标签列表
@@ -34,22 +30,15 @@ class Label extends AdminBase
       'rid' => input('get.rid', '')
     ];
 
-    try {
-      $label_list = $this->labelBusiness->getListByRid($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('标签列表数据获取失败'.$e->getMessage());
-    }
+    $label_list = $this->labelBusiness->getListByRid($params);
     return $this->responseMessage->success('标签列表数据获取成功', $label_list);
   }
 
   // 标签列表，基本信息
   public function baseList()
   {
-    try {
-      $label_list = $this->labelBusiness->getLabelBaseInfoList();
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $label_list = $this->labelBusiness->getLabelBaseInfoList();
+    
     return $this->responseMessage->success('标签基本信息列表数据获取成功', $label_list);
   }
 
@@ -63,11 +52,8 @@ class Label extends AdminBase
       'sort' => input('post.sort', 0, 'intval')
     ];
 
-    try {
-      $this->labelBusiness->insertLabel($label_data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $this->labelBusiness->insertLabel($label_data);
+    
     return $this->responseMessage->success('标签添加成功');
   }
 
@@ -75,11 +61,8 @@ class Label extends AdminBase
   public function detail()
   {
     $id = input('get.id', 0, 'intval');
-    try {
-      $label_data = $this->labelBusiness->getLabelDetail($id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $label_data = $this->labelBusiness->getLabelDetail($id);
+    
 
     return $this->responseMessage->success('标签详情数据获取成功', $label_data);
   }
@@ -95,11 +78,19 @@ class Label extends AdminBase
       'sort' => input('post.sort', 0, 'intval')
     ];
 
-    try {
-      $this->labelBusiness->updateLabel($label_data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $this->labelBusiness->updateLabel($label_data);
+    
     return $this->responseMessage->success('标签编辑成功');
+  }
+
+  // 标签删除
+  public function delete()
+  {
+    $id = input('post.id', 0, 'intval');
+
+    $this->labelBusiness->deleteLabel(['id' => $id]);
+    
+
+    return $this->responseMessage->success('标签删除成功');
   }
 }

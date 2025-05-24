@@ -1,4 +1,4 @@
-繁星cms开源版 v1.0.0
+繁星cms开源版 v3.0.0
 ===============
 
 ## 主要特点
@@ -19,6 +19,25 @@
 - 企 业：帮助创立初期的公司或团队快速搭建企业官网；
 - 开发者：帮助开发者快速完成承接外包的项目，避免从零搭建系统；
 - 学习者：初学编程的同学可以下载源代码来进行学习交流；
+
+
+## 繁星cms开源版软件截图
+
+![](static/images/free_v3.0.0/adm_tpl_01.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_02.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_03.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_04.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_05.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_06.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_07.jpg)
+
+![](static/images/free_v3.0.0/adm_tpl_08.jpg)
 
 
 
@@ -73,11 +92,18 @@
 
 ## 合作与技术支持联系
 - 联系邮箱： 1465768310@qq.com
-- 工作微信： <img src="/static/images/wechat_qrcode.png" style="zoom:50%;width:220px;" />
+- 工作微信： 
+<table>
+	<tbody>
+    <tr>
+      <td width="25%"><img src="static/images/wechat_qrcode.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 添加微信请备注来意，谨防忽略陌生人
-
-
 
 
 
@@ -85,10 +111,14 @@
 
 感谢各位大佬的支持，如果本项目对您等开发、学习带来帮助，感谢打赏本项目，让我们有精力持续更加完善项目。您的支持，是我们一直坚持下来的动力。
 
-<div style="overflow:hidden">
-  <img src="static/images/wechat_pay.jpg" style="float:left;zoom: 33%;width:260px;"/>
-    <img src="static/images/ali_pay.jpg" style="zoom: 22%;margin-left:30px;width:260px;" />
-</div>
+<table>
+	<tbody>
+    <tr>
+      <td width="33.33%"><img src="static/images/wechat_pay.jpg"></td>
+      <td width="33.33%"><img src="static/images/ali_pay.jpg"></td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -98,28 +128,8 @@
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2024 by 繁星cms
+版权所有Copyright © 2025 by 繁星cms
 
 All rights reserved。
 
 
-
-
-
-## 繁星cms开源版软件截图
-
-![](static/images/free_v1.0.0/adm_tpl_01.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_02.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_03.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_04.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_05.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_06.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_07.jpg)
-
-![](static/images/free_v1.0.0/adm_tpl_08.jpg)

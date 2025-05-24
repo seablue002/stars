@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace app\admin\business;
 
 use app\common\model\mysql\SystemConfigCategory AS SystemConfigCategoryModel;
+use app\common\model\mysql\SystemConfig AS SystemConfigModel;
 use think\Exception;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use app\common\exception\ApiException;
 use app\common\lib\Utils;
 use app\admin\validate\SystemConfigCategory AS SystemConfigCategoryValidate;
 
@@ -36,17 +38,14 @@ class SystemConfigCategory
     } else if ($pid_len === 1){
       $data['rid'] = $data['pid'][0];
     }
-    $data['pid'] = $data['pid'][$pid_len - 1];
+    $data['pid'] = (int)$data['pid'][$pid_len - 1];
     $system_config_category_data = array_merge($data, [
       'create_time' => time()
     ]);
-    try {
-      validate(SystemConfigCategoryValidate::class)
-        ->scene('add')
-        ->check($system_config_category_data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(SystemConfigCategoryValidate::class)
+      ->scene('add')
+      ->check($system_config_category_data);
 
     return $this->systemConfigCategoryModel->insertOneData($system_config_category_data);
   }
@@ -112,28 +111,48 @@ class SystemConfigCategory
     }
 
     $data = array_merge($data, ['update_time' => time()]);
-    try {
-      validate(SystemConfigCategoryValidate::class)
-        ->scene('edit')
-        ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(SystemConfigCategoryValidate::class)
+      ->scene('edit')
+      ->check($data);
+
     return $this->systemConfigCategoryModel->update($data);
   }
 
   public function getCategoryDetail ($id) {
-    try {
-      validate(SystemConfigCategoryValidate::class)
-        ->scene('detail')
-        ->check(['id' => $id]);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(SystemConfigCategoryValidate::class)
+      ->scene('detail')
+      ->check(['id' => $id]);
+
     return $this
       ->systemConfigCategoryModel
       ->where(['id' => $id])
       ->find()
       ->toArray();
+  }
+
+  public function deleteCategory ($id) {
+    validate(SystemConfigCategoryValidate::class)
+      ->scene('delete')
+      ->check(['id' => $id]);
+    $category_info = $this->systemConfigCategoryModel->where(['id' => $id])->field('id')->find()->toArray();
+
+    if (empty($category_info)) {
+      throw new ApiException('该分类不存在');
+    }
+
+    // 是否有子分类
+    $child_category_count = $this->systemConfigCategoryModel->where(['pid' => $id])->count();
+    if ($child_category_count > 0) {
+      throw new ApiException('该分类下有子分类，请先删除子分类');
+    }
+
+    // 是否已经和配置关联
+    $system_config_count = app()->make(SystemConfigModel::class)->where(['cid' => $id])->count();
+    if ($system_config_count > 0) {
+      throw new ApiException('该分类下有配置，请先删除配置');
+    }
+
+    return $this->systemConfigCategoryModel->where(['id' => $id])->delete($id);
   }
 }

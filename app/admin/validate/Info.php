@@ -32,6 +32,7 @@ class Info extends Validate
     'add' => ['title', 'column_id', 'create_time'],
     'edit' => ['id', 'title', 'column_id', 'update_time'],
     'detail' => ['id'],
+    'delete' => ['id'],
     'delete-cover' => ['id', 'column_id'],
   ];
 

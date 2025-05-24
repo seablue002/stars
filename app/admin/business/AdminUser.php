@@ -6,7 +6,7 @@ namespace app\admin\business;
 use app\admin\validate\AdminUser as AdminUserValidate;
 use app\common\model\mysql\AdminUser AS AdminUserModel;
 use think\Exception;
-use think\exception\ValidateException;
+use app\common\exception\ApiException;
 use think\facade\Cache;
 
 class AdminUser
@@ -28,25 +28,21 @@ class AdminUser
     $captcha_key = $data['captcha_key'];
     $code = Cache::store('redis')->get($captcha_key);
     if (!$code || strtolower($code) !== strtolower($data['captcha'])) {
-      throw new Exception('验证码错误');
+      throw new ApiException('验证码错误');
     }
     Cache::store('redis')->delete($captcha_key);
 
-    try {
-      validate(AdminUserValidate::class)
+    validate(AdminUserValidate::class)
         ->scene('login')
         ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
 
     $adminUser    = $this->adminUserModel->getAdminUserByUsername($data['username'])->toArray();
     if (empty($adminUser)) {
-      throw new Exception('登录失败');
+      throw new ApiException('登录失败');
     }
 
     if ($adminUser['password'] !== $data['password']) {
-      throw new Exception('密码错误');
+      throw new ApiException('密码错误');
     }
 
     // 更新登录信息到数据库表
@@ -56,7 +52,7 @@ class AdminUser
     ];
     $res        = $this->adminUserModel->updateById($adminUser['id'], $updateData);
     if (empty($res)) {
-      throw new Exception('登录失败');
+      throw new ApiException('登录失败');
     }
 
     unset($adminUser['password']);
@@ -65,7 +61,7 @@ class AdminUser
     try {
       Cache::store('redis')->set(config('jwt.redis_admin_user_prefix') . $adminUser['id'], $adminUser, config('jwt.redis_admin_user_exp'));
     } catch (Exception $e) {
-      throw new Exception('内部错误，登录失败');
+      throw new ApiException('内部错误，登录失败');
     }
 
     return [
@@ -125,13 +121,11 @@ class AdminUser
       'create_time' => $time,
       'update_time' => $time
     ]);
-    try {
-      validate(AdminUserValidate::class)
+    
+    validate(AdminUserValidate::class)
         ->scene('add')
         ->check($admin_data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    
     return $this->adminUserModel->insertOneData($admin_data);
   }
 
@@ -149,13 +143,10 @@ class AdminUser
     $admin_data = array_merge($data, [
       'update_time' => $time
     ]);
-    try {
-      validate(AdminUserValidate::class)
+    
+    validate(AdminUserValidate::class)
         ->scene('edit')
         ->check($admin_data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
 
     $where = [
       'id' => $data['id']

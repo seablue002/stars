@@ -15,15 +15,11 @@ Route::group(function() {
 
 });
 
-// 需要进行auth校验的路由组
+// 需要进行jwt
 Route::group(function() {
   // 退出登录
   Route::post('login-out', 'admin/login/loginOut');
 
-})->middleware(['jwt']);
-
-// 需要进行jwt与auth校验的路由组
-Route::group(function() {
   // 信息列表
   Route::get('info-list', 'admin/info/list');
   // 添加信息
@@ -33,7 +29,7 @@ Route::group(function() {
   // 编辑信息
   Route::post('edit-info', 'admin/info/edit');
   // 删除信息
-  Route::get('delete-info', 'admin/info/delete');
+  Route::post('delete-info', 'admin/info/delete');
   // 根据pid获取信息列表
   Route::get('info-list-by-pid', 'admin/info/getListByPid');
   // 信息详情内容图片上传
@@ -54,7 +50,7 @@ Route::group(function() {
   // 编辑标签
   Route::post('edit-label', 'admin/label/edit');
   // 删除标签
-//  Route::get('delete-label', 'admin/label/delete');
+  Route::post('delete-label', 'admin/label/delete');
 
   // 栏目列表
   Route::get('column-list', 'admin/column/list');
@@ -67,7 +63,7 @@ Route::group(function() {
   // 编辑栏目
   Route::post('edit-column', 'admin/column/edit');
   // 删除栏目
-//  Route::get('delete-column', 'admin/column/delete');
+  Route::get('delete-column', 'admin/column/delete');
   // 删除栏目cover封面
   Route::get('delete-column-cover', 'admin/column/deleteCover');
 
@@ -81,8 +77,6 @@ Route::group(function() {
   Route::get('column-extend-fields-config-detail', 'admin/columnExtendFieldsConfig/detail');
   // 编辑栏目自定义字段配置
   Route::post('edit-column-extend-fields-config', 'admin/columnExtendFieldsConfig/edit');
-  // 删除栏目自定义字段配置
-//  Route::get('delete-column-extend-fields-config', 'admin/columnExtendFieldsConfig/delete');
   // 保存配置设置
   Route::post('setting-save-column-extend-fields-config', 'admin/columnExtendFieldsConfig/settingSave');
 
@@ -172,7 +166,7 @@ Route::group(function() {
   // 编辑系统配置分类
   Route::post('edit-system-config-category', 'admin/systemConfigCategory/edit');
   // 删除系统配置分类
-//  Route::get('delete-system-config-category', 'admin/systemConfigCategory/delete');
+ Route::get('delete-system-config-category', 'admin/systemConfigCategory/delete');
   // 根据rid获取系统配置分类列表（主要用于生成动态配置表单tab菜单）
   Route::get('system-config-category-list-by-rid', 'admin/systemConfigCategory/getListByRid');
 
@@ -185,7 +179,7 @@ Route::group(function() {
   // 编辑系统配置
   Route::post('edit-system-config', 'admin/systemConfig/edit');
   // 删除系统配置
-//  Route::get('delete-system-config', 'admin/systemConfig/delete');
+  Route::get('delete-system-config', 'admin/systemConfig/delete');
   // 根据cid获取系统配置列表
   Route::get('system-config-list-by-cid', 'admin/systemConfig/getListByCid');
   // 保存配置设置
@@ -215,4 +209,3 @@ Route::group(function() {
   Route::get('dic-list', 'admin/system/getDicList');
 
 })->middleware(['jwt']);
-//->middleware(['jwt', 'auth']);

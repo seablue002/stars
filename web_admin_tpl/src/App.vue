@@ -1,51 +1,23 @@
 <template>
-  <div id="appContainer">
+  <div id="app">
     <router-view></router-view>
+
+    <!-- S 滚动到顶部 -->
+    <el-backtop></el-backtop>
+    <!-- E 滚动到顶部 -->
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store/index'
-import { HTTP_CONFIG } from '@/config/http'
-import { APP_NAME } from '@/config/app'
-import { systemConfigApi } from '@/api/common'
-export default defineComponent({
-  setup () {
-    const store = useStore<GlobalDataProps>()
-    store.commit('app/initSidebarIsCloseVal')
-    store.commit('app/initSidebarWVal')
-    // 读取localStorage登录态数据到store
-    store.commit('user/initAdminUserInfoVal')
+<script>
+import '#ASSETS/style/app.scss'
+import useCommonStore from '@/store/modules/common'
 
-    const appName = computed(() => {
-      return store.state.common.config?.systemConfig?.app_name?.value || APP_NAME
-    })
-
-    // 获取系统配置
-    const getSystemConfig = async () => {
-      const params = {
-        config_keys: [
-          'app_name',
-          'copyright'
-        ]
-      }
-      const { status, data } = await systemConfigApi(params)
-      if (status === HTTP_CONFIG.API_SUCCESS_CODE) {
-        store.commit('common/SET_SYSTEM_CONFIG', data)
-
-        const webTitle = document.querySelector('title') as HTMLTitleElement | null
-        webTitle && (webTitle.innerText = appName.value)
-      }
-    }
-
-    getSystemConfig()
-  }
-})
+export default {
+  setup() {
+    const commonStore = useCommonStore()
+    commonStore.getSystemConfig(['app_name', 'copyright'], 'systemConfig')
+  },
+}
 </script>
 
-<style lang="scss">
-@import '~@/assets/iconfont/iconfont.css';
-@import '~@/assets/style/app';
-</style>
+<style lang="scss" scoped></style>

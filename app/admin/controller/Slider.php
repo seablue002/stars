@@ -24,11 +24,9 @@ class Slider extends AdminBase
       'page' => input('get.page', 1),
       'page_size' => input('get.page_size', Config::get('page.page_size'))
     ];
-    try {
-      $slider = $this->sliderBusiness->getSliderList($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('轮播图列表数据获取失败');
-    }
+
+    $slider = $this->sliderBusiness->getSliderList($params);
+    
 
     return $this->responseMessage->success('轮播图列表数据获取成功', $slider);
   }
@@ -43,16 +41,13 @@ class Slider extends AdminBase
       'remarks' => input('post.remarks')
     ];
 
-    try {
-      if (isset($_FILES['slider']) && !empty($_FILES['slider'])) {
-        $slider_file                 = new UploadedFile($_FILES['slider']['tmp_name'], $_FILES['slider']['name'], $_FILES['slider']['type'], $_FILES['slider']['error']);
-        $url                       = Filesystem::disk('public')->putFile('sliders', $slider_file);
-        $params['url'] = str_replace('\\','/', $url);;
-      }
-      $this->sliderBusiness->insertSlider($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('轮播图添加失败');
+    if (isset($_FILES['slider']) && !empty($_FILES['slider'])) {
+      $slider_file                 = new UploadedFile($_FILES['slider']['tmp_name'], $_FILES['slider']['name'], $_FILES['slider']['type'], $_FILES['slider']['error']);
+      $url                       = Filesystem::disk('public')->putFile('sliders', $slider_file);
+      $params['url'] = str_replace('\\','/', $url);;
     }
+    $this->sliderBusiness->insertSlider($params);
+    
 
     return $this->responseMessage->success('轮播图添加成功');
   }
@@ -63,11 +58,7 @@ class Slider extends AdminBase
       'id' => input('get.id', 0, 'intval')
     ];
 
-    try {
-      $this->sliderBusiness->delete($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('轮播图删除失败'.$e->getMessage());
-    }
+    $this->sliderBusiness->delete($params);
 
     return $this->responseMessage->success('轮播图删除成功');
   }
@@ -76,11 +67,9 @@ class Slider extends AdminBase
     $params = [
       'id' => input('get.id', 0, 'intval')
     ];
-    try {
-      $slider_data = $this->sliderBusiness->detail($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('轮播图详情获取失败');
-    }
+
+    $slider_data = $this->sliderBusiness->detail($params);
+
     return $this->responseMessage->success('轮播图详情获取成功', $slider_data);
   }
 
@@ -95,16 +84,14 @@ class Slider extends AdminBase
       'remarks' => input('post.remarks')
     ];
 
-    try {
-      if (isset($_FILES['slider']) && !empty($_FILES['slider'])) {
-        $slider_file                 = new UploadedFile($_FILES['slider']['tmp_name'], $_FILES['slider']['name'], $_FILES['slider']['type'], $_FILES['slider']['error']);
-        $url                       = Filesystem::disk('public')->putFile('sliders', $slider_file);
-        $params['url'] = str_replace('\\','/', $url);;
-      }
-      $this->sliderBusiness->updateSlider($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('轮播图编辑失败'.$e->getMessage());
+
+    if (isset($_FILES['slider']) && !empty($_FILES['slider'])) {
+      $slider_file                 = new UploadedFile($_FILES['slider']['tmp_name'], $_FILES['slider']['name'], $_FILES['slider']['type'], $_FILES['slider']['error']);
+      $url                       = Filesystem::disk('public')->putFile('sliders', $slider_file);
+      $params['url'] = str_replace('\\','/', $url);;
     }
+    $this->sliderBusiness->updateSlider($params);
+
 
     return $this->responseMessage->success('轮播图编辑成功');
   }

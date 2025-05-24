@@ -5,7 +5,6 @@ namespace app\admin\business;
 
 use app\admin\validate\AuthRole as AuthRoleValidate;
 use app\common\model\mysql\AuthRole AS AuthRoleModel;
-use think\exception\ValidateException;
 
 class AuthRole
 {
@@ -50,13 +49,11 @@ class AuthRole
       'create_time' => $time,
       'update_time' => $time
     ]);
-    try {
-      validate(AuthRoleValidate::class)
+    
+    validate(AuthRoleValidate::class)
         ->scene('add')
         ->check($role_data);
-    } catch (ValidateException $e) {
-      throw new ValidateException($e->getMessage());
-    }
+    
     return $this->authRoleModel->insertOneData($role_data);
   }
   
@@ -65,14 +62,11 @@ class AuthRole
     $role_data = array_merge($data, [
       'update_time' => $time
     ]);
-    try {
-      validate(AuthRoleValidate::class)
+    
+    validate(AuthRoleValidate::class)
         ->scene('edit')
         ->check($role_data);
-    } catch (ValidateException $e) {
-      throw new ValidateException($e->getMessage());
-    }
-    
+
     $where = [
       'id' => $data['id']
     ];

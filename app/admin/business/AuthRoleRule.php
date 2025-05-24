@@ -1,6 +1,4 @@
 <?php
-
-
 namespace app\admin\business;
 
 
@@ -8,6 +6,7 @@ use app\admin\validate\AuthRoleRule as AuthRoleRuleValidate;
 use app\common\model\mysql\AuthRoleRule as AuthRoleRuleModel;
 use think\exception\ValidateException;
 use think\Exception;
+use app\common\exception\ApiException;
 
 class AuthRoleRule
 {
@@ -21,7 +20,6 @@ class AuthRoleRule
   public function insertAuthRoleRule($role_id, $auth_rule_ids_data)
   {
     $data = [];
-    $time = time();
     foreach ($auth_rule_ids_data as $rule_id) {
       $temp = [
         'role_id' => $role_id,
@@ -34,7 +32,7 @@ class AuthRoleRule
           ->scene('add')
           ->check($temp);
       } catch (ValidateException $e) {
-        throw new Exception($e->getMessage());
+        throw new ApiException($e->getMessage());
         break;
       }
     }
@@ -87,7 +85,7 @@ class AuthRoleRule
     if ($needAddRuleIdsLLen > 0) {
       $insert_success_len = $this->insertAuthRoleRule($role_id, $needAddRuleIds);
       if ($insert_success_len !== $needAddRuleIdsLLen) {
-        throw new Exception('修改角色拥有权限时，插入角色权限规则信息失败');
+        throw new ApiException('修改角色拥有权限时，插入角色权限规则信息失败');
       }
     }
 
@@ -96,7 +94,7 @@ class AuthRoleRule
     if ($needDelRuleIdsLLen > 0) {
       $del_success_len = $this->deleteAuthRoleRule($role_id, $needDelRuleIds);
       if ($del_success_len !== $needDelRuleIdsLLen) {
-        throw new Exception('修改角色拥有权限时，删除角色权限规则信息失败'.$del_success_len.'---'.json_encode($needDelRuleIds));
+        throw new ApiException('修改角色拥有权限时，删除角色权限规则信息失败'.$del_success_len.'---'.json_encode($needDelRuleIds));
       }
     }
   }

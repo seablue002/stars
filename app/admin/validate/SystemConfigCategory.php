@@ -32,6 +32,7 @@ class SystemConfigCategory extends Validate
   protected $scene = [
     'add' => ['name', 'pid', 'rid', 'create_time'],
     'edit' => ['id', 'name', 'pid', 'update_time'],
-    'detail' => ['id']
+    'detail' => ['id'],
+    'delete' => ['id']
   ];
 }

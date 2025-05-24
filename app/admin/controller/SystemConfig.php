@@ -21,16 +21,14 @@ class SystemConfig extends AdminBase
   {
     $params = [
       'cid' => input('get.cid', ''),
-      'label' => input('get.label', ''),
+      'title' => input('get.title', ''),
+      'create_time' => input('get.create_time', []),
       'page_size' => input('get.size', config('page.page_size'))
     ];
 
-    try {
-      $label_list = $this->systemConfigBusiness->getConfigListWithPage($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('系统配置列表数据获取失败');
-    }
-    return $this->responseMessage->success('系统配置列表数据获取成功', $label_list);
+    $list = $this->systemConfigBusiness->getConfigListWithPage($params);
+    
+    return $this->responseMessage->success('系统配置列表数据获取成功', $list);
   }
 
   // 系统配置列表
@@ -40,48 +38,25 @@ class SystemConfig extends AdminBase
       'cid' => input('get.cid', '')
     ];
 
-    try {
-      $label_list = $this->systemConfigBusiness->getListByCid($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('系统配置分类列表数据获取失败'.$e->getMessage());
-    }
-    return $this->responseMessage->success('系统配置分类列表数据获取成功', $label_list);
+    $list = $this->systemConfigBusiness->getListByCid($params);
+    
+    return $this->responseMessage->success('系统配置分类列表数据获取成功', $list);
   }
 
   // 添加系统配置
   public function add()
   {
-    // 获取请求数据
-    $cid = input('post.cid', 0, 'intval');
-    $field = input('post.field');
-    $label = input('post.label');
-    $tips = input('post.tips');
-    $type = input('post.type');
-    $props = input('post.props');
-    $options = input('post.options');
-    $value = input('post.value');
-    $validate_rules = input('post.validate_rules');
-    $sort = input('post.sort', 0, 'intval');
-    $status = input('post.status');
-    $category_data = [
-      'cid' => $cid,
-      'field' => $field,
-      'label' => $label,
-      'tips' => $tips,
-      'type' => $type,
-      'props' => $props,
-      'options' => $options,
-      'value' => $value,
-      'validate_rules' => $validate_rules,
-      'sort' => $sort,
-      'status' => $status
+    $params = [
+      'cid' => explode(',', input('post.cid')),
+      'name' => input('post.name'),
+      'field' => input('post.field'),
+      'props' => input('post.props'),
+      'sort' => input('post.sort', 0, 'intval'),
+      'status' => input('post.status')
     ];
 
-    try {
-      $this->systemConfigBusiness->insertConfig($category_data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $this->systemConfigBusiness->insertConfig($params);
+    
     return $this->responseMessage->success('系统配置添加成功');
   }
 
@@ -89,12 +64,9 @@ class SystemConfig extends AdminBase
   public function detail()
   {
     $id = input('get.id', 0, 'intval');
-    try {
-      $category_data = $this->systemConfigBusiness->getConfigDetail($id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
-
+    
+    $category_data = $this->systemConfigBusiness->getConfigDetail($id);
+    
     return $this->responseMessage->success('系统配置详情数据获取成功', $category_data);
   }
 
@@ -102,49 +74,36 @@ class SystemConfig extends AdminBase
   public function edit()
   {
     // 获取请求数据
-    $id = input('post.id', 0, 'intval');
-    // 获取请求数据
-    $cid = input('post.cid', 0, 'intval');
-    $field = input('post.field');
-    $label = input('post.label');
-    $tips = input('post.tips');
-    $type = input('post.type');
-    $props = input('post.props');
-    $options = input('post.options');
-    $value = input('post.value');
-    $validate_rules = input('post.validate_rules');
-    $sort = input('post.sort', 0, 'intval');
-    $status = input('post.status');
-    $category_data = [
-      'id' => $id,
-      'cid' => $cid,
-      'field' => $field,
-      'label' => $label,
-      'tips' => $tips,
-      'type' => $type,
-      'props' => $props,
-      'options' => $options,
-      'value' => $value,
-      'validate_rules' => $validate_rules,
-      'sort' => $sort,
-      'status' => $status
+    $params = [
+      'id' => input('post.id', 0, 'intval'),
+      'cid' => explode(',', input('post.cid')),
+      'name' => input('post.name'),
+      'field' => input('post.field'),
+      'props' => input('post.props'),
+      'sort' => input('post.sort', 0, 'intval'),
+      'status' => input('post.status')
     ];
-    try {
-      $this->systemConfigBusiness->updateConfig($category_data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    
+    $this->systemConfigBusiness->updateConfig($params);
+    
     return $this->responseMessage->success('系统配置编辑成功');
+  }
+  
+  // 删除系统配置
+  public function delete () { 
+    $id = input('get.id', 0, 'intval');
+    
+    $this->systemConfigBusiness->deleteConfig($id);
+    
+    return $this->responseMessage->success('系统配置删除成功');
   }
 
   // 保存设置配置信息
   public function settingSave () {
     $setting_data = request()->post();
-    try {
-      $this->systemConfigBusiness->settingSave($setting_data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('保存失败');
-    }
+    
+    $this->systemConfigBusiness->settingSave($setting_data);
+    
     return $this->responseMessage->success('保存成功');
   }
 
@@ -163,11 +122,8 @@ class SystemConfig extends AdminBase
       }
     }
 
-    try {
-      $conf_list = $this->systemConfigBusiness->getConfigValue($conf_keys);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('配置数据获取失败');
-    }
+    $conf_list = $this->systemConfigBusiness->getConfigValue($conf_keys);
+    
     return $this->responseMessage->success('配置数据获取成功', $conf_list);
   }
 }

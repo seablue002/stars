@@ -12,8 +12,7 @@ class SystemConfig extends Validate
     'id' => 'require|number',
     'cid' => 'require|number',
     'field' => 'require',
-    'label' => 'require',
-    'type' => 'require',
+    'name' => 'require',
     'create_time' => 'require',
     'update_time' => 'require'
   ];
@@ -24,15 +23,15 @@ class SystemConfig extends Validate
     'cid' => '系统配置分类id必须',
     'cid.number' => '系统配置分类id必须为数字',
     'field' => '系统配置字段名称必须',
-    'label' => '系统配置名称必须',
-    'type' => '系统配置对应表单元素类型必须',
+    'name' => '系统配置名称必须',
     'create_time' => '系统配置添加时间必须',
     'update_time' => '系统配置更新时间必须'
   ];
 
   protected $scene = [
-    'add' => ['cid', 'field', 'label', 'type', 'create_time'],
-    'edit' => ['id', 'cid', 'field', 'label', 'type', 'update_time'],
-    'detail' => ['id']
+    'add' => ['cid', 'field', 'name', 'create_time'],
+    'edit' => ['id', 'cid', 'field', 'name', 'update_time'],
+    'detail' => ['id'],
+    'delete' => ['id']
   ];
 }

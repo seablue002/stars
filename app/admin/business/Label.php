@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace app\admin\business;
 
 use app\common\model\mysql\Label AS LabelModel;
+use app\common\model\mysql\News AS InfoModel;
 use think\Exception;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\exception\ValidateException;
+use app\common\exception\ApiException;
 use app\common\lib\Utils;
 use app\admin\validate\Label AS LabelValidate;
 
@@ -42,13 +43,10 @@ class Label
     }
 
     $data['create_time'] = time();
-    try {
-      validate(LabelValidate::class)
-        ->scene('add')
-        ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(LabelValidate::class)
+      ->scene('add')
+      ->check($data);
 
     $add_id = $this->labelModel->insertOneData($data);
 
@@ -116,31 +114,50 @@ class Label
     }
 
     $data = array_merge($data, ['update_time' => time()]);
-    try {
-      validate(LabelValidate::class)
-        ->scene('edit')
-        ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(LabelValidate::class)
+      ->scene('edit')
+      ->check($data);
+
     $updated_row = $this->labelModel->update($data);
 
     return $updated_row;
   }
 
   public function getLabelDetail ($id) {
-    try {
-      validate(LabelValidate::class)
-        ->scene('detail')
-        ->check(['id' => $id]);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(LabelValidate::class)
+      ->scene('detail')
+      ->check(['id' => $id]);
+
     return $this
       ->labelModel
       ->alias('c')
       ->where(['c.id' => $id])
       ->find()
       ->toArray();
+  }
+
+  public function deleteLabel($data)
+  {
+    validate(LabelValidate::class)
+      ->scene('delete')
+      ->check($data);
+
+    // 查询是否已经和信息关联
+    $isExistWhere = [
+      ['', 'exp', \think\facade\Db::raw("FIND_IN_SET('{$data['id']}', label_ids)")]
+    ];
+
+    $existCount = app()->make(InfoModel::class)->where($isExistWhere)->count();
+    
+    if ($existCount > 0) {
+      throw new ApiException('该标签已经和信息关联，无法删除');
+    }
+
+    $where = [
+      'id' => $data['id']
+    ];
+
+    return $this->labelModel->where($where)->delete();
   }
 }

@@ -23,15 +23,14 @@ class TplVar extends AdminBase
   {
     $params = [
       'category_id' => input('get.category_id', ''),
-      'var_name' => input('get.name', ''),
+      'var_key' => input('get.var_key'),
+      'var_name' => input('get.var_name', ''),
+      'create_time' => input('get.create_time', []),
       'page_size' => input('get.size', config('page.page_size'))
     ];
 
-    try {
-      $name_list = $this->tplBusiness->getTplListWithPage($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('模板变量列表数据获取失败' . $e->getMessage());
-    }
+    $name_list = $this->tplBusiness->getTplListWithPage($params);
+    
     return $this->responseMessage->success('模板变量列表数据获取成功', $name_list);
   }
 
@@ -46,11 +45,8 @@ class TplVar extends AdminBase
       'var_value' => str_replace("\xC2\xA0","", input('post.var_value'))
     ];
 
-    try {
-      $this->tplBusiness->insertTpl($data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    $this->tplBusiness->insertTpl($data);
+    
     return $this->responseMessage->success('模板变量添加成功');
   }
 
@@ -58,12 +54,9 @@ class TplVar extends AdminBase
   public function detail()
   {
     $id = input('get.id', 0, 'intval');
-    try {
-      $category_data = $this->tplBusiness->getTplDetail($id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
-
+    
+    $category_data = $this->tplBusiness->getTplDetail($id);
+    
     return $this->responseMessage->success('模板变量详情数据获取成功', $category_data);
   }
 
@@ -78,11 +71,9 @@ class TplVar extends AdminBase
       'var_name' => input('post.var_name'),
       'var_value' => str_replace("\xC2\xA0","", input('post.var_value'))
     ];
-    try {
-      $this->tplBusiness->updateTpl($data);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+    
+    $this->tplBusiness->updateTpl($data);
+    
     return $this->responseMessage->success('模板变量编辑成功');
   }
 }

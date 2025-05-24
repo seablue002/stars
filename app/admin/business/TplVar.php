@@ -5,7 +5,6 @@ namespace app\admin\business;
 
 use app\common\model\mysql\PublicTempVar AS TplModel;
 use think\Exception;
-use think\exception\ValidateException;
 use app\admin\validate\TplVar AS TplValidate;
 
 class TplVar
@@ -37,13 +36,9 @@ class TplVar
       'create_time' => time()
     ]);
 
-    try {
-      validate(TplValidate::class)
-        ->scene('add')
-        ->check($tpl_data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(TplValidate::class)
+      ->scene('add')
+      ->check($tpl_data);
 
     return $this->tplModel->insertOneData($tpl_data);
   }
@@ -51,9 +46,18 @@ class TplVar
   public function getTplListWithPage($params)
   {
     $where = [];
+    if ($params['var_key']) {
+      $where[] = ['var_key', 'LIKE', "%{$params['var_key']}%"];
+    }
+
     if ($params['var_name']) {
       $where[] = ['var_name', 'LIKE', "%{$params['var_name']}%"];
     }
+
+    if (count($params['create_time']) > 0) {
+      $where[] = ['create_time', 'BETWEEN', [strtotime($params['create_time'][0]), strtotime($params['create_time'][1])]];
+    }
+
     if ($params['category_id']) {
       $where[] = ['category_id', '=', $params['category_id']];
     }
@@ -74,24 +78,19 @@ class TplVar
       }
     }
     $data = array_merge($data, ['update_time' => time()]);
-    try {
-      validate(TplValidate::class)
-        ->scene('edit')
-        ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
+    validate(TplValidate::class)
+      ->scene('edit')
+      ->check($data);
+
     return $this->tplModel->update($data);
   }
 
   public function getTplDetail ($id) {
-    try {
-      validate(TplValidate::class)
-        ->scene('detail')
-        ->check(['id' => $id]);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    validate(TplValidate::class)
+      ->scene('detail')
+      ->check(['id' => $id]);
+
     return $this
       ->tplModel
       ->where(['id' => $id])

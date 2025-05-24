@@ -79,4 +79,24 @@ class Utils
     return $output;
   }
 
+  function parseInvalidJson($str) {
+    $decoded = json_decode($str, true);
+    if (json_last_error() === JSON_ERROR_NONE) {
+        return $decoded;
+    }
+
+    $fixed = preg_replace('/^([\'"])|([\'"])$/', '"', $str);
+    $fixed = preg_replace('/([{,]\s*)([a-zA-Z0-9-]+?)(\s*:)/', '$1"$2"$3', $fixed);
+    $fixed = str_replace("'", '"', $fixed);
+    $fixed = preg_replace('/,(\s*[}\]])/', '$1', $fixed);
+    $fixed = str_replace('\\"', '"', $fixed);
+
+    $decoded = json_decode($fixed, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new \Exception('JSON decode error: ' . json_last_error_msg());
+    }
+
+    return $decoded;
+  }
+
 }

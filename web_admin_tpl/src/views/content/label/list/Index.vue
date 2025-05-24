@@ -1,40 +1,26 @@
 <template>
-  <div class="list PAGE-MAIN-CONTENT">
-    <el-card shadow="never" class="box-card">
-      <template #header>
-        <div class="card-header">
-          <span>标签列表</span>
-        </div>
-      </template>
-      <el-row>
-        <el-col :span="10" :xs="24" :sm="12" :md="10">
-          <LabelEditableTree
-            :mode="labelEditableTreeMode"
-            @add-category="labelEditableTreeMode = 'add'"
-            @edit-category="labelEditableTreeMode = 'edit'">
-          </LabelEditableTree>
-        </el-col>
-      </el-row>
+  <div class="page-container page-container--bg PAGE-MAIN-CONTENT">
+    <el-card shadow="never">
+      <NTEditableLabelTree
+        ref="editableLabelTreeRef"
+        :availableIsLastVal="[0, 1]"
+        class="sm:w-1/1 md:w-1/1 lg:w-2/3 xl:w-3/5 2xl:w-2/5"
+      >
+      </NTEditableLabelTree>
     </el-card>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script>
+import { defineComponent } from 'vue'
 import useAutoMainContentHeight from '@/hooks/useAutoMainContentHeight'
-import LabelEditableTree from '@/components/business/LabelEditableTree.vue'
+
 export default defineComponent({
-  components: {
-    LabelEditableTree
-  },
-  setup () {
+  name: 'LabelList',
+  setup() {
     useAutoMainContentHeight()
 
-    const labelEditableTreeMode = ref('add')
-    return {
-      labelEditableTreeMode
-    }
-  }
+    return {}
+  },
 })
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

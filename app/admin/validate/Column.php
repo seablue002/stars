@@ -36,6 +36,7 @@ class Column extends Validate
   protected $scene = [
     'add' => ['name', 'pid', 'rid', 'column_dir_path', 'model_tb_name', 'create_time'],
     'edit' => ['id', 'name', 'pid', 'rid', 'column_dir_path', 'model_tb_name', 'update_time'],
-    'detail' => ['id']
+    'detail' => ['id'],
+    'delete' => ['id'],
   ];
 }

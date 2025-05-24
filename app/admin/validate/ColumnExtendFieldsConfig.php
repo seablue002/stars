@@ -11,25 +11,25 @@ class columnExtendFieldsConfig extends Validate
   protected $rule = [
     'id' => 'require|number',
     'field' => 'require',
-    'label' => 'require',
-    'type' => 'require',
+    'name' => 'require',
+    'props' => 'require',
     'create_time' => 'require',
     'update_time' => 'require'
   ];
 
   protected $message = [
-    'id' => '系统配置id必须',
-    'id.number' => '系统配置id必须为数字',
-    'field' => '系统配置字段名称必须',
-    'label' => '系统配置名称必须',
-    'type' => '系统配置对应表单元素类型必须',
-    'create_time' => '系统配置添加时间必须',
-    'update_time' => '系统配置更新时间必须'
+    'id' => '配置id必须',
+    'id.number' => '配置id必须为数字',
+    'field' => '配置字段名称必须',
+    'name' => '配置名称必须',
+    'props' => '配置元素属性必须',
+    'create_time' => '配置添加时间必须',
+    'update_time' => '配置更新时间必须'
   ];
 
   protected $scene = [
-    'add' => ['field', 'label', 'type', 'create_time'],
-    'edit' => ['id', 'field', 'label', 'type', 'update_time'],
+    'add' => ['field', 'name', 'type', 'create_time'],
+    'edit' => ['id', 'field', 'name', 'type', 'update_time'],
     'detail' => ['id']
   ];
 }

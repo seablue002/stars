@@ -1,6 +1,4 @@
 <?php
-
-
 namespace app\home\controller;
 
 
@@ -22,41 +20,32 @@ class Common extends BaseController
   }
 
   public function getProvince () {
-    try {
-      $province_list = $this->commonBusiness->getProvince();
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('获取省市数据失败');
-    }
+    $province_list = $this->commonBusiness->getProvince();
+
     return $this->responseMessage->success('获取省市数据成功', $province_list);
   }
 
   public function getCity () {
     $province_id = input('get.province_id', 0, 'intval');
-    try {
-      $province_list = $this->commonBusiness->getCity($province_id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('获取城市数据失败');
-    }
+
+    $province_list = $this->commonBusiness->getCity($province_id);
+
     return $this->responseMessage->success('获取城市数据成功', $province_list);
   }
 
   public function getArea () {
     $city_id = input('get.city_id', 0, 'intval');
-    try {
-      $area_list = $this->commonBusiness->getArea($city_id);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('获取区数据失败');
-    }
+
+    $area_list = $this->commonBusiness->getArea($city_id);
+
     return $this->responseMessage->success('获取区数据成功', $area_list);
   }
 
   public function getDicList () {
     $dicTypeKeys = input('get.dic_type_keys', []);
-    try {
-      $dicList = $this->commonBusiness->getDicList($dicTypeKeys);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('字典列表数据获取失败');
-    }
+
+    $dicList = $this->commonBusiness->getDicList($dicTypeKeys);
+
     return $this->responseMessage->success('字典列表数据获取成功', $dicList);
   }
 
@@ -71,11 +60,8 @@ class Common extends BaseController
       }
     }
 
-    try {
-      $conf_list = $this->systemConfigBusiness->getConfigValue($conf_keys);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('配置数据获取失败');
-    }
+    $conf_list = $this->systemConfigBusiness->getConfigValue($conf_keys);
+ 
     return $this->responseMessage->success('配置数据获取成功', $conf_list);
   }
 

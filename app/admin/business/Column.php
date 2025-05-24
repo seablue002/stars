@@ -8,9 +8,12 @@ use think\Exception;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\exception\ValidateException;
+use app\common\exception\ApiException;
 use app\common\lib\Utils;
 use app\admin\validate\Column AS ColumnValidate;
+use app\admin\business\Info AS InfoBusiness;
+use think\facade\Db;
+use app\admin\business\ColumnExtendFields AS ColumnExtendFieldsBusiness;
 
 class Column
 {
@@ -46,13 +49,10 @@ class Column
     }
 
     $data['create_time'] = time();
-    try {
-      validate(ColumnValidate::class)
+    
+    validate(ColumnValidate::class)
         ->scene('add')
         ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
 
     $add_id = $this->columnModel->insertOneData($data);
 
@@ -132,13 +132,11 @@ class Column
     }
 
     $data = array_merge($data, ['update_time' => time()]);
-    try {
-      validate(ColumnValidate::class)
+    
+    validate(ColumnValidate::class)
         ->scene('edit')
         ->check($data);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+
     $updated_row = $this->columnModel->update($data);
     if ($updated_row) {
       // 如果更新成功，判断是否存在当前栏目名的目录
@@ -151,13 +149,10 @@ class Column
   }
 
   public function getColumnDetail ($id) {
-    try {
-      validate(ColumnValidate::class)
+    validate(ColumnValidate::class)
         ->scene('detail')
         ->check(['id' => $id]);
-    } catch (ValidateException $e) {
-      throw new Exception($e->getMessage());
-    }
+    
     return $this
       ->columnModel
       ->alias('c')
@@ -165,6 +160,53 @@ class Column
       ->where(['c.id' => $id])
       ->find()
       ->toArray();
+  }
+
+  public function delete($data)
+  {
+    validate(ColumnValidate::class)
+      ->scene('delete')
+      ->check($data);
+
+    $columnId = $data['id'];
+    // 查询下面是否有子栏目，有则不可以删除
+    $subColumn = $this
+    ->columnModel->getFields(['pid' => $columnId], 'id');
+
+    if (!empty($subColumn)) {
+      throw new ApiException('栏目下有子栏目，不可以直接删除');
+    }
+
+    // 查询栏目下是否有内容，有则不可以删除
+    $info = app()->make(InfoBusiness::class)->infoModel->getFields(['column_id' => $columnId], 'id');
+
+    if (!empty($info)) {
+      throw new ApiException('栏目下有内容，不可以直接删除');
+    }
+
+    $column = $this->columnModel->getOne(['id' => $columnId], 'parent_dir_path, column_dir_path');
+
+    try {
+      Db::startTrans();
+      $this->columnModel->where([
+        'id' => $columnId
+      ])->delete();
+
+      app()->make(ColumnExtendFieldsBusiness::class)->columnExtendFieldsModel->where([
+        'column_id' => $columnId
+      ])->delete();
+
+      // 删除栏目对应缓存目录
+      $dirName = 'tpl_catche/home/' . $column['parent_dir_path'] . $column['column_dir_path'];
+      if (file_exists($dirName)) {
+        rmdir($dirName);
+      }
+
+      Db::commit();
+    } catch (\Throwable $e) {
+      Db::rollback();
+      throw $e;
+    }
   }
 
   public function deleteCover ($column_id) {

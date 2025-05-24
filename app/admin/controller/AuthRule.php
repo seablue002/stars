@@ -1,13 +1,9 @@
 <?php
-
-
 namespace app\admin\controller;
 
 
 use think\App;
-use think\exception\ValidateException;
 use think\facade\Config;
-use think\facade\View;
 use app\admin\business\AuthRule AS AuthRuleBusiness;
 
 class AuthRule extends AdminBase
@@ -30,12 +26,10 @@ class AuthRule extends AdminBase
       'name' => input('get.name', ''),
       'page_size' => input('get.size', Config::get('page.page_size'))
     ];
-    try {
-      $auth_rule_list = $this->authRuleBusiness->getAuthRulePageList($params);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('权限规则列表数据获取失败');
-    }
-    return $this->responseMessage->success('权限规则列表数据获取成功', $auth_rule_list);
+    
+    $list = $this->authRuleBusiness->getAuthRulePageList($params);
+    
+    return $this->responseMessage->success('权限规则列表数据获取成功', $list);
   }
 
   /**
@@ -43,12 +37,9 @@ class AuthRule extends AdminBase
    * @return [type] [description]
    */
   public function baseList() {
-    try {
-      $auth_rule_base_list = $this->authRuleBusiness->getAuthRuleList('id, title, pid');
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('权限规则基本信息列表数据获取失败');
-    }
-    return $this->responseMessage->success('权限规则基本信息列表数据获取成功', $auth_rule_base_list);
+    $list = $this->authRuleBusiness->getAuthRuleList('id, title, pid');
+    
+    return $this->responseMessage->success('权限规则基本信息列表数据获取成功', $list);
   }
   
   public function add () {
@@ -64,13 +55,7 @@ class AuthRule extends AdminBase
       'menu' => $menu_type
     ];
     
-    try {
-      $rule_id = $this->authRuleBusiness->insertAuthRule($rule_data);
-    } catch (ValidateException $e) {
-      return $this->responseMessage->error($e->getMessage());
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('系统内部错误');
-    }
+    $this->authRuleBusiness->insertAuthRule($rule_data);
     
     return $this->responseMessage->success('权限规则添加成功');
   }
@@ -81,13 +66,10 @@ class AuthRule extends AdminBase
       return $this->responseMessage->error('缺少必要参数');
     }
 
-    try {
-      $rule_data = [];
-      $rule_data['rule_info'] = $this->authRuleBusiness->getOneAuthRuleInfo(['id' => $id]);
-      $rule_data['id'] = $id;
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('权限规则详情数据获取失败');
-    }
+    $rule_data = [];
+    $rule_data['rule_info'] = $this->authRuleBusiness->getOneAuthRuleInfo(['id' => $id]);
+    $rule_data['id'] = $id;
+    
     return $this->responseMessage->success('权限规则详情数据获取成功', $rule_data);
   }
   
@@ -108,13 +90,7 @@ class AuthRule extends AdminBase
       'menu' => $menu_type
     ];
 
-    try {
-      $rule_id = $this->authRuleBusiness->editAuthRule($rule_data);
-    } catch (ValidateException $e) {
-      return $this->responseMessage->error($e->getMessage());
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('系统内部错误');
-    }
+    $this->authRuleBusiness->editAuthRule($rule_data);
   
     return $this->responseMessage->success('权限规则编辑成功');
   }

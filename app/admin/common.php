@@ -40,7 +40,7 @@ function checkJWTToken($request)
   try {
     $payload = JWT::decode($jwt, $key, $alg);
     $request->payload = $payload->data;
-  } catch (\Exception $e) {
+  } catch (\Throwable $e) {
     return false;
   }
   return true;

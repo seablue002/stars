@@ -4,7 +4,7 @@
 namespace app\admin\business;
 use app\admin\validate\AuthRoleUser as AuthRoleUserValidate;
 use app\common\model\mysql\AuthRoleUser AS AuthRoleUserModel;
-use think\Exception;
+use app\common\exception\ApiException;
 use think\exception\ValidateException;
 
 class AuthRoleUser
@@ -36,7 +36,7 @@ class AuthRoleUser
           ->scene('add')
           ->check($temp);
       } catch (ValidateException $e) {
-        throw new Exception($e->getMessage());
+        throw new ApiException($e->getMessage());
         break;
       }
     }
@@ -64,7 +64,7 @@ class AuthRoleUser
           ->scene('add')
           ->check($temp);
       } catch (ValidateException $e) {
-        throw new Exception($e->getMessage());
+        throw new ApiException($e->getMessage());
         break;
       }
     }

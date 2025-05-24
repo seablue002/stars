@@ -3,10 +3,6 @@ declare (strict_types=1);
 
 namespace app\admin\controller;
 
-use app\BaseController;
-use think\facade\View;
-use think\exception\ValidateException;
-use app\admin\validate\AdminUser AS AdminUserValidate;
 use app\admin\business\AdminUser AS AdminUserBusiness;
 use think\Request;
 
@@ -25,23 +21,19 @@ class Login extends AdminBase
       'captcha_key' => $captcha_key,
     ];
 
-    try {
-      $adminUserBusiness = new AdminUserBusiness;
-      $adminUser = $adminUserBusiness->login($requestData);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error($e->getMessage());
-    }
+
+    $adminUserBusiness = new AdminUserBusiness;
+    $adminUser = $adminUserBusiness->login($requestData);
+    
     return $this->responseMessage->success('登录成功', $adminUser);
   }
 
   public function loginOut (Request $request) {
     $adminUserId = $request->payload->id;
-    try {
-      $adminUserBusiness = new AdminUserBusiness;
-      $adminUserBusiness->out($adminUserId);
-    } catch (\Exception $e) {
-      return $this->responseMessage->error('退出登录失败');
-    }
+
+    $adminUserBusiness = new AdminUserBusiness;
+    $adminUserBusiness->out($adminUserId);
+
 
     return $this->responseMessage->success('退出登录成功');
   }

@@ -90,4 +90,9 @@ class BaseModel extends Model
       return $item['id'];
     }, $this->saveAll($data)->toArray());
   }
+
+  public function getFields($where, $field, $order=[], $key = '')
+  {
+    return $this->where($where)->order($order)->column($field, $key);
+  }
 }

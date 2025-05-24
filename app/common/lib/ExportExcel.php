@@ -4,6 +4,8 @@
 namespace app\common\lib;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use app\common\exception\ApiException;
+
 class ExportExcel
 {
   // 表格名称
@@ -70,8 +72,8 @@ class ExportExcel
       if (!is_dir($dirname)) {
         try {
           mkdir($dirname, 0775, true);
-        } catch (\Exception $e) {
-          throw new Exception('导出数据失败');
+        } catch (\Throwable $e) {
+          throw new ApiException('导出数据失败');
         }
       }
       $writer = new Xlsx($spreadsheet);
