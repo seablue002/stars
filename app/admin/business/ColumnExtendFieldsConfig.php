@@ -87,7 +87,6 @@ class ColumnExtendFieldsConfig
       $config_list[$idx]['options'] = $config_list[$idx]['props']['options'] ?? [];
       $config_list[$idx]['validate'] = $config_list[$idx]['props']['rules'] ?? [];
       $config_list[$idx]['style'] = $config_list[$idx]['props']['style'] ?? [];
-      unset($config_list[$idx]['name']);
     }
     return $config_list;
   }

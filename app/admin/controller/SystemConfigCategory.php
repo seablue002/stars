@@ -48,16 +48,13 @@ class SystemConfigCategory extends AdminBase
   public function add()
   {
     // 获取请求数据
-    $name          = input('post.name');
-    $pid           = explode(',', input('post.pid'));
-    $sort          = input('post.sort', 0, 'intval');
-    $category_data = [
-      'name' => $name,
-      'pid'  => $pid,
-      'sort' => $sort,
+    $params = [
+      'name' => input('post.name'),
+      'pid'  => explode(',', input('post.pid')),
+      'sort' => input('post.sort', 0, 'intval'),
     ];
     
-    $this->systemConfigCategoryBusiness->insertCategory($category_data);
+    $this->systemConfigCategoryBusiness->insertCategory($params);
     
     return $this->responseMessage->success('分类添加成功');
   }
