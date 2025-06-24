@@ -4,31 +4,29 @@
 <template>
   <div class="nt-search-form-filter">
     <el-form v-bind="$attrs" ref="ntSearchFormFilterForm">
-      <el-row>
-        <slot :isFoldFormFilter="isFoldFormFilter"></slot>
+      <slot :isFoldFormFilter="isFoldFormFilter"></slot>
 
-        <NTSearchFormFilterItem
-          :col="$attrs?.btnsCol"
-          class="nt-search-form-filter__btns"
-        >
-          <el-form-item>
-            <el-button type="primary" :loading="loading" @click="handleSearch">
-              查 询
-            </el-button>
-            <el-button plain @click="handleReset">重 置</el-button>
-            <el-button
-              v-if="isShowFoldUnfoldBtn"
-              link
-              type="primary"
-              @click="isFoldFormFilter = !isFoldFormFilter"
-            >
-              {{ isFoldFormFilter ? '展开' : '收起' }}
-              <i v-show="isFoldFormFilter" class="ri-arrow-down-s-line"></i>
-              <i v-show="!isFoldFormFilter" class="ri-arrow-up-s-line"></i>
-            </el-button>
-          </el-form-item>
-        </NTSearchFormFilterItem>
-      </el-row>
+      <NTSearchFormFilterItem
+        :col="$attrs?.btnsCol"
+        class="nt-search-form-filter__btns"
+      >
+        <el-form-item>
+          <el-button type="primary" :loading="loading" @click="handleSearch">
+            查 询
+          </el-button>
+          <el-button plain @click="handleReset">重 置</el-button>
+          <el-button
+            v-if="isShowFoldUnfoldBtn"
+            link
+            type="primary"
+            @click="isFoldFormFilter = !isFoldFormFilter"
+          >
+            {{ isFoldFormFilter ? '展开' : '收起' }}
+            <i v-show="isFoldFormFilter" class="ri-arrow-down-s-line"></i>
+            <i v-show="!isFoldFormFilter" class="ri-arrow-up-s-line"></i>
+          </el-button>
+        </el-form-item>
+      </NTSearchFormFilterItem>
     </el-form>
   </div>
 </template>

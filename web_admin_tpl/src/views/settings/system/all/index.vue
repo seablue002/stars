@@ -33,6 +33,7 @@ import useCurrentInstance from '@/hooks/business/useCurrentInstance'
 import { ROOT_NODE_PID } from '@/components/NTEditableTree/index.vue'
 import { cloneDeep } from 'lodash-es'
 import formCreate from '@form-create/element-ui'
+import { canConvertToNumber } from '@/utils/other/common'
 
 export default defineComponent({
   components: {
@@ -104,6 +105,9 @@ export default defineComponent({
       if (status === $apiCode.SUCCESS) {
         systemConfList.value = data.map((item) => {
           item = item.props
+          if (canConvertToNumber(item.value)) {
+            item.value = Number(item.value)
+          }
           return item
         })
       } else {

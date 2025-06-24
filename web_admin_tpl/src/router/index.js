@@ -6,7 +6,7 @@ import routes from './routes'
 
 // 实例化路由
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory('/admsystem/'),
   routes,
 })
 export default router

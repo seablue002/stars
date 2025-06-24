@@ -2,31 +2,21 @@
  * 列表搜索筛选过滤表单item
 -->
 <template>
-  <el-col v-bind="colComputedAttrs" class="nt-search-form-filter-item">
+  <div v-bind="$attrs" class="nt-search-form-filter-item">
     <slot></slot>
-  </el-col>
+  </div>
 </template>
 
 <script>
-import { computed } from 'vue'
-
 export default {
   name: 'NTSearchFormFilterItem',
-  setup(props, { attrs }) {
-    const colComputedAttrs = computed(() => {
-      return {
-        xs: 24,
-        sm: 12,
-        md: 8,
-        lg: 8,
-        xl: 6,
-        ...attrs?.col,
-      }
-    })
-    return {
-      colComputedAttrs,
-    }
+  setup() {
+    return {}
   },
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.nt-search-form-filter-item {
+  display: inline-block;
+}
+</style>

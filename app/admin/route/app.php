@@ -30,6 +30,8 @@ Route::group(function() {
   Route::post('edit-info', 'admin/info/edit');
   // 删除信息
   Route::post('delete-info', 'admin/info/delete');
+  // 清除信息缓存
+  Route::post('delete-info-cache', 'admin/info/deleteCache');
   // 根据pid获取信息列表
   Route::get('info-list-by-pid', 'admin/info/getListByPid');
   // 信息详情内容图片上传
@@ -64,6 +66,8 @@ Route::group(function() {
   Route::post('edit-column', 'admin/column/edit');
   // 删除栏目
   Route::get('delete-column', 'admin/column/delete');
+  // 清除栏目缓存
+  Route::get('delete-column-cache', 'admin/column/deleteCache');
   // 删除栏目cover封面
   Route::get('delete-column-cover', 'admin/column/deleteCover');
 

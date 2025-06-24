@@ -31,6 +31,12 @@ export const deleteInfoApi = async (data) => {
   return http.post(url, data)
 }
 
+// 删除信息缓存
+export const deleteInfoCacheApi = async (data) => {
+  const url = `${API_VERSION}/admin/delete-info-cache`
+  return http.post(url, data)
+}
+
 // 删除封面
 export const deleteCoverApi = async (params) => {
   const url = `${API_VERSION}/admin/delete-cover`

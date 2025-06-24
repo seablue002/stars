@@ -17,7 +17,7 @@ use app\admin\business\ColumnExtendFields AS ColumnExtendFieldsBusiness;
 
 class Column
 {
-  private $columnModel = null;
+  public $columnModel = null;
   private $utils = null;
 
   public function __construct()
@@ -206,6 +206,79 @@ class Column
     } catch (\Throwable $e) {
       Db::rollback();
       throw $e;
+    }
+  }
+
+  public function deleteCache($data)
+  {
+    validate(ColumnValidate::class)
+      ->scene('delete-cache')
+      ->check($data);
+
+    // 1、使用栏目id 找到column表中parent_dir_path、column_dir_path， 构成缓存目录
+    $column = $this->columnModel->getOne(['id' => $data['id']], ['is_last', 'parent_dir_path', 'column_dir_path']);
+    if (empty($column)) {
+      throw new ApiException('栏目不存在，无法清除缓存');
+    }
+
+    $cacheDirParent = root_path() . implode(DIRECTORY_SEPARATOR, [
+        'public',
+        'tpl_cache',
+        'home',
+        trim($column['parent_dir_path'], DIRECTORY_SEPARATOR),
+    ]) . DIRECTORY_SEPARATOR;
+
+
+    $cacheDirBase = trim($column['column_dir_path'], DIRECTORY_SEPARATOR);
+
+    $cacheDir = $cacheDirParent . $cacheDirBase . DIRECTORY_SEPARATOR;
+
+    if (!is_dir($cacheDir)) {
+      throw new ApiException('缓存目录不存在');
+    }
+
+    // 2、判断栏目类型
+    if (in_array($column['is_last'], [0, 1])) {
+      // 列表
+      // 3、如果类型为list, 
+      // 3.1、使用glob匹配删除当前栏目对应的缓存文件
+      $cacheFile = $cacheDirParent . $cacheDirBase . '.html';
+      if (file_exists($cacheFile)) {
+        unlink($cacheFile);
+      }
+
+      foreach (glob($cacheDirParent . $cacheDirBase . '_*.html') as $file) {
+        if (file_exists($file)) {
+          unlink($file);
+        } 
+      }
+
+      // 3.2、删除当前栏目目录及所有子目录下所有的缓存文件
+      $this->deleteDirFiles($cacheDir);
+    } else if (in_array($column['is_last'], [2])) {
+      // 单页
+      // 4、如果类型为single,单页面，直接删除缓存文件
+      $cacheFile = $cacheDirParent . $cacheDirBase . '.html';
+      if (file_exists($cacheFile)) {
+        unlink($cacheFile);
+      }
+    } else {
+      throw new ApiException('不支持的栏目类型，无法清除缓存');
+    }
+  }
+
+  protected function deleteDirFiles($dir) {
+    if (!is_dir($dir)) return;
+    $files = scandir($dir);
+    foreach ($files as $file) {
+      if ($file === '.' || $file === '..') continue;
+      $fullPath = $dir . DIRECTORY_SEPARATOR . $file;
+      if (is_dir($fullPath)) {
+        // 递归删除子目录
+        $this->deleteDirFiles($fullPath);
+      } elseif (is_file($fullPath)) {
+        unlink($fullPath);
+      }
     }
   }
 

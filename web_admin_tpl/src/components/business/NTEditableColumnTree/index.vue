@@ -9,6 +9,16 @@
       @delete-category="handleDeleteColumn"
       @select-row="handleSelectRow"
     >
+      <template #otherOperate="{ data }">
+        <el-icon
+          v-if="data.pid !== ROOT_NODE_PID"
+          title="清除缓存"
+          class="tree-node__icon"
+          @click.stop="handleDeleteColumnCache(data)"
+        >
+          <Brush />
+        </el-icon>
+      </template>
     </NTEditableTree>
 
     <!-- S 栏目添加、修改弹窗 -->
@@ -37,7 +47,7 @@ export default defineComponent({
   },
   emits: ['init-column-list', 'select-row', 'delete-success'],
   setup(props, { emit }) {
-    const { $api, $apiCode, $message, $tree } = useCurrentInstance()
+    const { $api, $apiCode, $message, $tree, $confirm } = useCurrentInstance()
     const { getTree, formateTree } = $tree
 
     const editableTreeRef = ref()
@@ -127,6 +137,36 @@ export default defineComponent({
       }
     }
 
+    // 清除栏目缓存
+    const handleDeleteColumnCache = async (data) => {
+      $confirm('确定要清除当前栏目及其子栏目下所有的信息缓存吗？', '提示', {
+        type: 'warning',
+      })
+        .then(() => {
+          deleteColumnCache(data.id)
+        })
+        .catch(() => {})
+    }
+
+    const deleteColumnCache = async (id) => {
+      const params = {
+        id,
+      }
+      const apiRes = await $api.column.deleteColumnCacheApi(params)
+      const { status, message } = apiRes.data
+      if (status === $apiCode.SUCCESS) {
+        $message.success({
+          message: '清除栏目缓存成功',
+          duration: 3000,
+        })
+      } else {
+        $message.warning({
+          message,
+          duration: 3000,
+        })
+      }
+    }
+
     // 选择
     const handleSelectRow = (data) => {
       emit('select-row', data)
@@ -189,10 +229,12 @@ export default defineComponent({
     }
 
     return {
+      ROOT_NODE_PID,
       editableTreeRef,
       treeData,
       treeIsLoading,
       handleDeleteColumn,
+      handleDeleteColumnCache,
       handleSelectRow,
       handleOpenAddDialog,
       handleOpenEditDialog,

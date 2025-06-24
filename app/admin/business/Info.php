@@ -225,6 +225,51 @@ class Info
     return $this->infoModel->where($where)->delete();
   }
 
+  public function deleteCache($params)
+  {
+    $column_id = $params['column_id'];
+    $id = $params['id'];
+
+    // 校验
+    validate(InfoValidate::class)
+      ->scene('delete-cache')
+      ->check($params);
+
+    // 1、使用column_id,找到column表中parent_dir_path、column_dir_path， 构成缓存目录
+    $column = $this->columnBusiness->columnModel->getOne([['id', '=', $column_id]], 'parent_dir_path, column_dir_path');
+    
+    if (empty($column)) {
+      throw new ApiException('栏目不存在');
+    }
+
+    // 查找对应的信息内容详情
+    $info = $this->infoModel->getOne([['id', '=', $id]], 'id');
+    if (empty($info)) {
+      throw new ApiException('信息内容不存在');
+    }
+
+    $cacheDir = root_path() . implode(DIRECTORY_SEPARATOR, [
+        'public',
+        'tpl_cache',
+        'home',
+        trim($column['parent_dir_path'], DIRECTORY_SEPARATOR),
+        trim($column['column_dir_path'], DIRECTORY_SEPARATOR)
+    ]) . DIRECTORY_SEPARATOR;
+
+    if (!is_dir($cacheDir)) {
+      throw new ApiException('缓存目录不存在');
+    }
+
+    // 2、使用信息custom_id结合缓存目录构建具体缓存文件路径
+    $cacheFile = $cacheDir . $id . '.html';
+    if (!file_exists($cacheFile)) {
+      throw new ApiException('缓存文件不存在');
+    }
+
+    // 3、删除对应缓存文件
+    unlink($cacheFile);
+  }
+
   public function deleteCover ($info_id) {
     $info = $this->infoModel->where(['id' => $info_id])->field('cover_url')->find();
     if (!empty($info)) {

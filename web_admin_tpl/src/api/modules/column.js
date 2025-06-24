@@ -31,6 +31,12 @@ export const deleteColumnApi = async (params) => {
   return http.get(url, { params })
 }
 
+// 删除栏目缓存
+export const deleteColumnCacheApi = async (params) => {
+  const url = `${API_VERSION}admin/delete-column-cache`
+  return http.get(url, { params })
+}
+
 // 删除栏目封面
 export const deleteColumnCoverApi = async (params) => {
   const url = `${API_VERSION}admin/delete-column-cover`

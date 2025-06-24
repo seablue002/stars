@@ -141,3 +141,9 @@ export const parseInvalidJson = (str) => {
     return JSON.parse(fixed)
   }
 }
+
+// 判断字符串是否可以转换为数字
+export function canConvertToNumber(str) {
+  const numberPattern = /^[-+]?\d*(\.\d+)?$/
+  return numberPattern.test(str)
+}

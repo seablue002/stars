@@ -166,6 +166,17 @@ class Info extends AdminBase
     return $this->responseMessage->success('删除成功');
   }
 
+  public function deleteCache() {
+    $data = [
+      'id' => input('post.id'),
+      'column_id' => input('post.column_id', 0, 'intval')
+    ];
+
+    $this->infoBusiness->deleteCache($data);
+
+    return $this->responseMessage->success('清除缓存成功');
+  }
+
   public function infoContentPicUpload () {
     $path = request()->domain() . "/storage/";
     $file_url = $this->uploadBusiness->uploadFile(request()->file('file'), $path, 'info_content');

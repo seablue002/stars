@@ -7,11 +7,13 @@
 
         <div class="info">
           <p class="text-[18px] font-bold">
-            你好，我是stars繁星CMS， 一款开源免费、上手简单的企业网站搭建系统。
+            您好
+            {{ userInfo?.username }}，欢迎使用 {{ APP_TITLE }}
+            {{ APP_VERSION }}， 一款开源免费、上手简单的企业网站搭建系统。
             <span style="color: #ff5722">专业团队维护，持续更新完善</span>
           </p>
           <p>
-            包含： 菜单栏目管理、模板管理、信息内容管理、
+            包含： 菜单栏目管理、模板管理、信息内容管理、页面缓存管理、
             公共模板变量管理、系统配置等功能。
           </p>
         </div>
@@ -179,7 +181,7 @@
             </el-col>
             <el-col :span="6">
               <el-card shadow="hover">
-                <el-link :underline="false" :href="API_HOST">
+                <el-link :underline="false" :href="API_HOST" target="_blank">
                   <el-icon><Monitor /></el-icon>
                   网站前台首页
                 </el-link>
@@ -210,17 +212,22 @@
   </div>
 </template>
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import * as echarts from 'echarts'
 import { chunk, flatten } from 'lodash-es'
 import useCurrentInstance from '@/hooks/business/useCurrentInstance'
-import { APP_VERSION } from '@/settings/config/app'
+import useUserStore from '@/store/modules/user'
+import { APP_VERSION, APP_TITLE } from '@/settings/config/app'
 import { API_HOST } from '@/settings/config/http'
 
 export default {
   name: 'HomePage',
   setup() {
+    const userStore = useUserStore()
     const { $api, $apiCode, $message } = useCurrentInstance()
+
+    // 用户信息
+    const userInfo = computed(() => userStore.userInfo)
 
     // 访问量
     const visitsChartRef = ref(null)
@@ -412,6 +419,8 @@ export default {
     return {
       API_HOST,
       APP_VERSION,
+      APP_TITLE,
+      userInfo,
       visitsChartRef,
       buyChartRef,
       systemInfo,

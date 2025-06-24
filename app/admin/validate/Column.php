@@ -38,5 +38,6 @@ class Column extends Validate
     'edit' => ['id', 'name', 'pid', 'rid', 'column_dir_path', 'model_tb_name', 'update_time'],
     'detail' => ['id'],
     'delete' => ['id'],
+    'delete-cache' => ['id'],
   ];
 }

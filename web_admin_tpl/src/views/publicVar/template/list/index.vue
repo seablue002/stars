@@ -8,7 +8,6 @@
         :inline="true"
         label-width="80"
         label-position="left"
-        :btnsCol="{ lg: 12 }"
         :loading="loadding"
         :isShowFoldUnfoldBtn="false"
         :searchHandle="handleSearch"
@@ -37,7 +36,7 @@
             </el-form-item>
           </NTSearchFormFilterItem>
 
-          <NTSearchFormFilterItem :xl="10">
+          <NTSearchFormFilterIte>
             <el-form-item label="创建时间" prop="create_time">
               <el-date-picker
                 v-model="searchFormFilter.create_time"
@@ -54,7 +53,7 @@
               >
               </el-date-picker>
             </el-form-item>
-          </NTSearchFormFilterItem>
+          </NTSearchFormFilterIte>
         </template>
       </NTSearchFormFilter>
       <!-- E 搜索表单 -->

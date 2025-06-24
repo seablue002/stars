@@ -61,7 +61,8 @@ class Index extends IndexBase
     if (empty($column) || $column['is_show_in_nav'] !== 1) {
       abort(404, '栏目不存在');
     }
-    $catche_tpl_name = root_path() . 'public\\tpl_catche\\home\\' . $tpl_catch_file_name;
+
+    $catche_tpl_name = root_path() . 'public' . DIRECTORY_SEPARATOR . 'tpl_cache' . DIRECTORY_SEPARATOR . 'home' . DIRECTORY_SEPARATOR . $tpl_catch_file_name;
 
     if (preg_match("/^\d+\.html$/", $route_params_last) || ($column->is_last === 2)) {
       if (preg_match('/.html$/', $catche_tpl_name) === 0) {

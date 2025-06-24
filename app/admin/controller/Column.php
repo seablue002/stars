@@ -155,6 +155,17 @@ class Column extends AdminBase
     return $this->responseMessage->success('删除成功');
   }
 
+  // 清除栏目缓存
+  public function deleteCache() {
+    $data = [
+      'id' => input('get.id', 0, 'intval')
+    ];
+
+    $this->columnBusiness->deleteCache($data);
+
+    return $this->responseMessage->success('清除栏目缓存成功');
+  }
+
   public function deleteCover () {
     $column_id = input('get.column_id', 0);
     

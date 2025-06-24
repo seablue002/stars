@@ -70,6 +70,8 @@
                   @click.stop="handleDelCategory(node, data)"
                   ><Delete
                 /></el-icon>
+
+                <slot name="otherOperate" :node="node" :data="data"></slot>
               </span>
             </a>
           </span>

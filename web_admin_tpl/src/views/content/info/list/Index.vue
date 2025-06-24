@@ -23,7 +23,6 @@
             :inline="true"
             label-width="80"
             label-position="left"
-            :btnsCol="{ lg: 12 }"
             :loading="loadding"
             :isShowFoldUnfoldBtn="false"
             :searchHandle="handleSearch"
@@ -41,7 +40,7 @@
                 </el-form-item>
               </NTSearchFormFilterItem>
 
-              <NTSearchFormFilterItem :xl="10">
+              <NTSearchFormFilterItem>
                 <el-form-item label="创建时间" prop="create_time">
                   <el-date-picker
                     v-model="searchFormFilter.create_time"
@@ -106,6 +105,14 @@
                 @click="handleDelete(row)"
               >
                 删除
+              </el-button>
+              <el-button
+                type="danger"
+                text
+                size="small"
+                @click="handleDeleteCache(row)"
+              >
+                清除缓存
               </el-button>
             </template>
           </NTCustomTable>
@@ -225,7 +232,7 @@ export default defineComponent({
         label: '操作',
         prop: 'TABLE_COLUMN_OPTS',
         fixed: 'right',
-        width: 200,
+        width: 230,
         overflowTooltip: false,
       },
     ]
@@ -342,6 +349,39 @@ export default defineComponent({
       }
     }
 
+    // 清除缓存
+    const handleDeleteCache = (row) => {
+      $confirm('确定清除信息缓存吗？', '提示', {
+        type: 'warning',
+      })
+        .then(async () => {
+          await deleteInfoCache(row)
+        })
+        .catch(() => {})
+    }
+
+    // 清除信息缓存
+    const deleteInfoCache = async ({ id, column_id: columnId }) => {
+      const data = {
+        id,
+        column_id: columnId,
+      }
+
+      const apiRes = await $api.info.deleteInfoCacheApi(data)
+      const { status, message } = apiRes.data
+      if (status === $apiCode.SUCCESS) {
+        $message.success({
+          message,
+          duration: 3000,
+        })
+      } else {
+        $message.warning({
+          message,
+          duration: 3000,
+        })
+      }
+    }
+
     // 选中信息栏目
     const editableColumnTreeRef = ref()
 
@@ -382,6 +422,7 @@ export default defineComponent({
       handleEdit,
       handleDetail,
       handleDelete,
+      handleDeleteCache,
       editableColumnTreeRef,
       handleInitColumnList,
       handleSelectInfoRow,

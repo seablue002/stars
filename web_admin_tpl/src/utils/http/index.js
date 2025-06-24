@@ -3,6 +3,7 @@
  */
 import useUserStore from '@/store/modules/user'
 import { XHR_TIMEOUT } from '@/settings/config/http'
+import router from '@/router'
 import NTAxios from './NTAxios'
 
 // 请求拦截器函数
@@ -12,7 +13,15 @@ function requestInterceptorHandler(axiosInstance, requestConfig) {
 }
 
 // 响应拦截器函数
-function responseInterceptorHandler() {}
+function responseInterceptorHandler(instance, response) {
+  const { status, data } = response.data
+  if (status === 400 && data === 'need-login') {
+    const userStore = useUserStore()
+    userStore.clear()
+
+    router.push('/login')
+  }
+}
 
 // 响应错误处理
 function responseErrorHandler(error) {

@@ -17,6 +17,7 @@ export default defineConfig((buildParsms) => {
   const env = loadEnv(mode, './')
 
   const config = {
+    base: '/admsystem/',
     build: {
       sourcemap: mode === 'development',
       minify: 'terser',
